@@ -1,0 +1,1963 @@
+import React, { useState, useRef } from 'react';
+import { Plus, Trash2, Printer, Play, Eye, X, ChevronDown, ChevronUp, Edit3, FileText } from 'lucide-react';
+import { Product, WorkOrder, WorkOrderItem, MaterialRequest, Customer } from '../types';
+// WorkOrderDB import removed
+import { AutoCompleteInput } from '../components/AutoCompleteInput';
+import { autoCompleteService } from '../services/AutoCompleteService';
+import WorkOrdersSummaryPrint from '../components/manufacturing/WorkOrdersSummaryPrint';
+
+interface Props {
+    lang: string;
+    products: Product[];
+    customers: Customer[];
+    workOrders: WorkOrder[];
+    onSaveWorkOrder: (order: any) => void;
+    onUpdateWorkOrder: (id: string, order: any) => void;
+    onDeleteWorkOrder: (id: string) => void;
+    onExecuteWorkOrder: (id: string) => void;
+    onRefresh: () => void;
+}
+
+const ManufacturingPage = ({ lang, products, customers, workOrders, onSaveWorkOrder, onUpdateWorkOrder, onDeleteWorkOrder, onExecuteWorkOrder, onRefresh }: Props) => {
+    const [showWOModal, setShowWOModal] = useState(false);
+    const [showPrintPreview, setShowPrintPreview] = useState(false);
+    const [showSummaryPrint, setShowSummaryPrint] = useState(false);
+    const [selectedOrder, setSelectedOrder] = useState<WorkOrder | null>(null);
+    const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
+    const [editingOrderId, setEditingOrderId] = useState<string | null>(null);
+    const printRef = useRef<HTMLDivElement>(null);
+
+    // Work Order Form State
+    // Helper functions for ID generation
+    const generateOrderNumber = () => {
+        const nextNumber = workOrders.length + 1;
+        return `P${String(nextNumber).padStart(5, '0')}`;
+    };
+
+    const generateJobOrderNumber = () => {
+        const year = new Date().getFullYear().toString().slice(-2);
+        const baseNumber = 64; // Starting from 25-00064
+        let maxNumber = baseNumber - 1;
+
+        workOrders.forEach(order => {
+            if (order.jobOrderNumber) {
+                const parts = order.jobOrderNumber.split('-');
+                if (parts.length === 2 && parts[0] === year) {
+                    const num = parseInt(parts[1], 10);
+                    if (!isNaN(num) && num > maxNumber) {
+                        maxNumber = num;
+                    }
+                }
+            }
+        });
+
+        const nextNumber = maxNumber + 1;
+        return `${year}-${String(nextNumber).padStart(5, '0')}`;
+    };
+
+    const [woForm, setWoForm] = useState<{
+        orderNumber: string;
+        jobOrderNumber: string;
+        customerName: string;
+        customerId: string;
+        priority: 'normal' | 'high' | 'very_high' | 'urgent';
+        startDate: string;
+        endDate: string;
+        items: WorkOrderItem[];
+        materials: MaterialRequest[];
+        notes: string;
+    }>(() => {
+        const today = new Date();
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() + 10);
+
+        return {
+            orderNumber: '',
+            jobOrderNumber: '',
+            customerName: '',
+            customerId: '',
+            priority: 'normal',
+            startDate: today.toISOString().split('T')[0],
+            endDate: endDate.toISOString().split('T')[0],
+            items: [],
+            materials: [],
+            notes: ''
+        };
+    });
+
+    const resetForm = () => {
+        const today = new Date();
+        const endDate = new Date();
+        endDate.setDate(endDate.getDate() + 10);
+
+        setWoForm({
+            orderNumber: generateOrderNumber(),
+            jobOrderNumber: generateJobOrderNumber(),
+            customerName: '',
+            customerId: '',
+            priority: 'normal',
+            startDate: today.toISOString().split('T')[0],
+            endDate: endDate.toISOString().split('T')[0],
+            items: [{
+                id: `item-${Date.now()}`,
+                itemName: '',
+                quantity: 1,
+                unit: 'قطعة',
+                dimensions: { height: 0, length: 0, width: 0 },
+                modelCode: '',
+                paintColor: '',
+                paintCode: '',
+                glossPercentage: '',
+                veneer: 'NO',
+                notes: ''
+            }],
+            materials: [
+                {
+                    id: `mat-wood-${Date.now()}`,
+                    productName: '',
+                    quantity: 1,
+                    unit: '',
+                    category: 'wood',
+                    isManual: true,
+                    size: { width: 0, length: 0 }
+                },
+                {
+                    id: `mat-hardware-${Date.now() + 1}`,
+                    productName: '',
+                    quantity: 1,
+                    unit: '',
+                    category: 'accessories',
+                    isManual: true,
+                    notes: ''
+                }
+            ],
+            notes: ''
+        });
+    };
+
+    const openNewOrderModal = () => {
+        resetForm();
+        setEditingOrderId(null);
+        setWoForm(prev => ({
+            ...prev,
+            orderNumber: generateOrderNumber(),
+            jobOrderNumber: generateJobOrderNumber()
+        }));
+        setShowWOModal(true);
+    };
+
+    // Open Edit Order Modal
+    const openEditOrderModal = (order: WorkOrder) => {
+        setEditingOrderId(order.id);
+        setWoForm({
+            orderNumber: order.orderNumber,
+            jobOrderNumber: order.jobOrderNumber,
+            customerName: order.customerName,
+            customerId: order.customerId || '',
+            priority: order.priority,
+            startDate: order.startDate ? order.startDate.split('T')[0] : new Date().toISOString().split('T')[0],
+            endDate: order.endDate ? order.endDate.split('T')[0] : '',
+            items: order.items || [],
+            materials: order.materials || [],
+            notes: order.notes || ''
+        });
+        setShowWOModal(true);
+    };
+
+    // Add Item
+    const addItem = () => {
+        const newItem: WorkOrderItem = {
+            id: `item-${Date.now()}`,
+            itemName: '',
+            quantity: 1,
+            unit: 'قطعة',
+            dimensions: { width: 0, length: 0, height: 0 },
+            modelCode: '',
+            paintColor: '',
+            paintCode: '',
+            glossPercentage: '',
+            veneer: 'NO',
+            notes: ''
+        };
+        setWoForm({ ...woForm, items: [...woForm.items, newItem] });
+    };
+
+    // Paste from Excel
+    const handlePasteFromExcel = async () => {
+        try {
+            // Read from clipboard
+            const text = await navigator.clipboard.readText();
+
+            if (!text || text.trim() === '') {
+                alert(lang === 'ar'
+                    ? '⚠️ لم يتم العثور على بيانات. انسخ البيانات من Excel أولاً'
+                    : '⚠️ No data found. Copy data from Excel first');
+                return;
+            }
+
+            // Split into rows
+            const rows = text.split('\n').filter(row => row.trim());
+
+            // Convert each row to WorkOrderItem
+            const newItems: WorkOrderItem[] = rows.map((row, index) => {
+                // Excel uses Tab as separator
+                const cols = row.split('\t').map(col => col.trim());
+
+                return {
+                    id: `item-${Date.now()}-${index}`,
+                    itemName: cols[0] || '',
+                    quantity: parseInt(cols[1]) || 1,
+                    unit: 'قطعة',
+                    dimensions: {
+                        width: parseInt(cols[2]) || 0,
+                        length: parseInt(cols[3]) || 0,
+                        height: parseInt(cols[4]) || 0
+                    },
+                    modelCode: '',
+                    paintColor: '',
+                    paintCode: '',
+                    glossPercentage: '',
+                    veneer: 'NO',
+                    notes: ''
+                };
+            });
+
+            // Filter out completely empty items
+            const validItems = newItems.filter(item => item.itemName && item.itemName.trim() !== '');
+
+            if (validItems.length === 0) {
+                alert(lang === 'ar'
+                    ? '⚠️ لم يتم العثور على عناصر صالحة. تأكد من نسخ البيانات بشكل صحيح'
+                    : '⚠️ No valid items found. Make sure to copy data correctly');
+                return;
+            }
+
+            // Add to existing items
+            setWoForm({ ...woForm, items: [...woForm.items, ...validItems] });
+
+            alert(lang === 'ar'
+                ? `✅ تم إضافة ${validItems.length} عنصر بنجاح!`
+                : `✅ Successfully added ${validItems.length} items!`);
+
+        } catch (error) {
+            console.error('Paste error:', error);
+            alert(lang === 'ar'
+                ? '❌ فشل اللصق. تأكد من نسخ البيانات من Excel أولاً (Ctrl+C)'
+                : '❌ Paste failed. Make sure to copy data from Excel first (Ctrl+C)');
+        }
+    };
+
+    const updateItem = (index: number, field: string, value: any) => {
+        const newItems = [...woForm.items];
+        if (field.startsWith('dimensions.')) {
+            const dimField = field.split('.')[1];
+            newItems[index] = {
+                ...newItems[index],
+                dimensions: { ...newItems[index].dimensions, [dimField]: value }
+            };
+        } else {
+            newItems[index] = { ...newItems[index], [field]: value };
+        }
+        setWoForm({ ...woForm, items: newItems });
+    };
+
+    const removeItem = (index: number) => {
+        setWoForm({ ...woForm, items: woForm.items.filter((_, i) => i !== index) });
+    };
+
+    // Add Material from Products
+    const addMaterial = (productId: string) => {
+        const product = products.find(p => p.id === productId);
+        if (!product) return;
+
+        const existingIndex = woForm.materials.findIndex(m => m.productId === productId);
+        if (existingIndex !== -1) {
+            // Update quantity if already exists
+            const newMaterials = [...woForm.materials];
+            newMaterials[existingIndex].quantity += 1;
+            setWoForm({ ...woForm, materials: newMaterials });
+        } else {
+            // Determine category correctly
+            let category: 'wood' | 'accessories' | 'other' = 'other';
+            if (product.categoryCode === 'WD') {
+                category = 'wood';
+            } else if (['HW', 'EB', 'CN', 'TB'].includes(product.categoryCode)) {
+                category = 'accessories';
+            }
+
+            const newMaterial: MaterialRequest = {
+                id: `mat-${Date.now()}`,
+                productId: product.id,
+                productName: lang === 'ar' ? product.nameAr : product.nameEn,
+                quantity: 1,
+                unit: product.unit,
+                category: category,
+                isManual: false
+            };
+            setWoForm({ ...woForm, materials: [...woForm.materials, newMaterial] });
+        }
+    };
+
+    // Add Manual Material (not from products database)
+    const addManualMaterial = () => {
+        const newMaterial: MaterialRequest = {
+            id: `mat-${Date.now()}`,
+            productName: '',
+            quantity: 1,
+            unit: 'قطعة',
+            category: 'other',
+            isManual: true
+        };
+        setWoForm({ ...woForm, materials: [...woForm.materials, newMaterial] });
+    };
+
+    const updateMaterial = (index: number, field: string, value: any) => {
+        const newMaterials = [...woForm.materials];
+        newMaterials[index] = { ...newMaterials[index], [field]: value };
+        setWoForm({ ...woForm, materials: newMaterials });
+    };
+
+    // Paste Wood Materials from Excel - Smart Version
+    const handlePasteWoodMaterials = async () => {
+        try {
+            const text = await navigator.clipboard.readText();
+
+            if (!text || text.trim() === '') {
+                alert(lang === 'ar'
+                    ? '⚠️ لم يتم العثور على بيانات. انسخ البيانات من Excel أولاً'
+                    : '⚠️ No data found. Copy data from Excel first');
+                return;
+            }
+
+            const rows = text.split('\n').filter(row => row.trim());
+
+            // Smart header detection - skip if first row contains common headers
+            const headerKeywords = ['material', 'name', 'qty', 'quantity', 'unit', 'width', 'length', 'thickness', 'اسم', 'المادة', 'الكمية', 'الوحدة', 'العرض', 'الطول', 'السمك'];
+            let startIndex = 0;
+
+            if (rows.length > 0) {
+                const firstRow = rows[0].toLowerCase();
+                const hasHeader = headerKeywords.some(keyword => firstRow.includes(keyword.toLowerCase()));
+                if (hasHeader) {
+                    startIndex = 1; // Skip header row
+                    console.log('📋 Header detected and skipped');
+                }
+            }
+
+            const newMaterials: MaterialRequest[] = [];
+
+            for (let i = startIndex; i < rows.length; i++) {
+                const cols = rows[i].split('\t').map(col => col.trim());
+
+                // Skip empty rows
+                if (!cols[0] || cols[0] === '') continue;
+
+                // Smart column detection
+                let materialName = cols[0] || '';
+                let quantity = 1;
+                let unit = 'لوح';
+                let width = 0;
+                let thickness = 0;
+                let length = 0;
+
+                // Try to parse quantity (column 1)
+                if (cols[1]) {
+                    const qtyValue = parseFloat(cols[1]);
+                    if (!isNaN(qtyValue)) {
+                        quantity = qtyValue;
+                    }
+                }
+
+                // Smart unit detection (column 2)
+                // If column 2 is a number, it's probably width, not unit
+                if (cols[2]) {
+                    const col2AsNumber = parseFloat(cols[2]);
+                    if (isNaN(col2AsNumber)) {
+                        // It's text, so it's the unit
+                        unit = cols[2];
+                        // Check if we have thickness (5 columns: Name|QTY|Unit|W|T|L)
+                        if (cols[5] && !isNaN(parseFloat(cols[5]))) {
+                            width = parseInt(cols[3]) || 0;
+                            thickness = parseInt(cols[4]) || 0;
+                            length = parseInt(cols[5]) || 0;
+                        } else {
+                            // No thickness (4 columns: Name|QTY|Unit|W|L)
+                            width = parseInt(cols[3]) || 0;
+                            length = parseInt(cols[4]) || 0;
+                        }
+                    } else {
+                        // It's a number, so it's width (no unit column)
+                        unit = 'لوح'; // default
+                        // Check if we have thickness (4 columns: Name|QTY|W|T|L)
+                        if (cols[4] && !isNaN(parseFloat(cols[4]))) {
+                            width = col2AsNumber;
+                            thickness = parseInt(cols[3]) || 0;
+                            length = parseInt(cols[4]) || 0;
+                        } else {
+                            // No thickness (3 columns: Name|QTY|W|L)
+                            width = col2AsNumber;
+                            length = parseInt(cols[3]) || 0;
+                        }
+                    }
+                }
+
+                newMaterials.push({
+                    id: `mat-wood-${Date.now()}-${i}`,
+                    productName: materialName,
+                    quantity: quantity,
+                    unit: unit,
+                    category: 'wood' as const,
+                    isManual: true,
+                    size: {
+                        width: width,
+                        length: length
+                    },
+                    notes: thickness > 0 ? `T: ${thickness}mm` : ''
+                });
+            }
+
+            if (newMaterials.length === 0) {
+                alert(lang === 'ar'
+                    ? '⚠️ لم يتم العثور على مواد صالحة'
+                    : '⚠️ No valid materials found');
+                return;
+            }
+
+            setWoForm({ ...woForm, materials: [...woForm.materials, ...newMaterials] });
+
+            alert(lang === 'ar'
+                ? `✅ تم إضافة ${newMaterials.length} مادة خشبية!`
+                : `✅ Added ${newMaterials.length} wood materials!`);
+
+        } catch (error) {
+            console.error('Paste error:', error);
+            alert(lang === 'ar'
+                ? '❌ فشل اللصق. تأكد من نسخ البيانات من Excel'
+                : '❌ Paste failed. Copy data from Excel first');
+        }
+    };
+
+    // Paste Accessories from Excel - Smart Version
+    const handlePasteAccessories = async () => {
+        try {
+            const text = await navigator.clipboard.readText();
+
+            if (!text || text.trim() === '') {
+                alert(lang === 'ar'
+                    ? '⚠️ لم يتم العثور على بيانات. انسخ البيانات من Excel أولاً'
+                    : '⚠️ No data found. Copy data from Excel first');
+                return;
+            }
+
+            const rows = text.split('\n').filter(row => row.trim());
+
+            // Smart header detection
+            const headerKeywords = ['material', 'name', 'qty', 'quantity', 'notes', 'ملاحظات', 'اسم', 'المادة', 'الكمية'];
+            let startIndex = 0;
+
+            if (rows.length > 0) {
+                const firstRow = rows[0].toLowerCase();
+                const hasHeader = headerKeywords.some(keyword => firstRow.includes(keyword.toLowerCase()));
+                if (hasHeader) {
+                    startIndex = 1;
+                    console.log('📋 Header detected and skipped');
+                }
+            }
+
+            const newMaterials: MaterialRequest[] = [];
+
+            for (let i = startIndex; i < rows.length; i++) {
+                const cols = rows[i].split('\t').map(col => col.trim());
+
+                // Skip empty rows
+                if (!cols[0] || cols[0] === '') continue;
+
+                let materialName = cols[0] || '';
+                let quantity = 1;
+                let notes = '';
+
+                // Parse quantity
+                if (cols[1]) {
+                    const qtyValue = parseFloat(cols[1]);
+                    if (!isNaN(qtyValue)) {
+                        quantity = qtyValue;
+                    }
+                }
+
+                // Notes (column 2 or later)
+                if (cols[2]) {
+                    notes = cols[2];
+                }
+
+                newMaterials.push({
+                    id: `mat-acc-${Date.now()}-${i}`,
+                    productName: materialName,
+                    quantity: quantity,
+                    unit: 'قطعة',
+                    category: 'accessories' as const,
+                    isManual: true,
+                    notes: notes
+                });
+            }
+
+            if (newMaterials.length === 0) {
+                alert(lang === 'ar'
+                    ? '⚠️ لم يتم العثور على مواد صالحة'
+                    : '⚠️ No valid materials found');
+                return;
+            }
+
+            setWoForm({ ...woForm, materials: [...woForm.materials, ...newMaterials] });
+
+            alert(lang === 'ar'
+                ? `✅ تم إضافة ${newMaterials.length} إكسسوار!`
+                : `✅ Added ${newMaterials.length} accessories!`);
+
+        } catch (error) {
+            console.error('Paste error:', error);
+            alert(lang === 'ar'
+                ? '❌ فشل اللصق. تأكد من نسخ البيانات من Excel'
+                : '❌ Paste failed. Copy data from Excel first');
+        }
+    };
+
+    const removeMaterial = (index: number) => {
+        setWoForm({ ...woForm, materials: woForm.materials.filter((_, i) => i !== index) });
+    };
+
+    // Double-click column header to paste values from clipboard
+    const handleColumnPaste = async (columnName: string, tableType: 'items' | 'materials') => {
+        try {
+            const text = await navigator.clipboard.readText();
+
+            if (!text || text.trim() === '') {
+                alert(lang === 'ar'
+                    ? '⚠️ لم يتم العثور على بيانات في الحافظة'
+                    : '⚠️ No data found in clipboard');
+                return;
+            }
+
+            // Split by newlines to get individual values
+            const values = text.split('\n')
+                .map(v => v.trim())
+                .filter(v => v !== '');
+
+            if (values.length === 0) {
+                alert(lang === 'ar'
+                    ? '⚠️ لا توجد قيم صالحة'
+                    : '⚠️ No valid values');
+                return;
+            }
+
+            if (tableType === 'items') {
+                let newItems = [...woForm.items];
+
+                // Auto-create rows if needed
+                const rowsNeeded = values.length;
+                const currentRows = newItems.length;
+
+                if (rowsNeeded > currentRows) {
+                    const rowsToAdd = rowsNeeded - currentRows;
+                    for (let i = 0; i < rowsToAdd; i++) {
+                        newItems.push({
+                            id: `item-${Date.now()}-${i}`,
+                            itemName: '',
+                            quantity: 1,
+                            unit: 'قطعة',
+                            dimensions: { width: 0, length: 0, height: 0 },
+                            modelCode: '',
+                            paintColor: '',
+                            paintCode: '',
+                            glossPercentage: '',
+                            veneer: 'NO',
+                            notes: ''
+                        });
+                    }
+                }
+
+                // Paste values
+                values.forEach((value, idx) => {
+                    if (idx < newItems.length) {
+                        switch (columnName) {
+                            case 'itemName':
+                                newItems[idx].itemName = value;
+                                break;
+                            case 'quantity':
+                                newItems[idx].quantity = parseInt(value) || newItems[idx].quantity;
+                                break;
+                            case 'width':
+                                newItems[idx].dimensions = { ...newItems[idx].dimensions, width: parseInt(value) || 0 };
+                                break;
+                            case 'length':
+                                newItems[idx].dimensions = { ...newItems[idx].dimensions, length: parseInt(value) || 0 };
+                                break;
+                            case 'height':
+                                newItems[idx].dimensions = { ...newItems[idx].dimensions, height: parseInt(value) || 0 };
+                                break;
+                            case 'modelCode':
+                                newItems[idx].modelCode = value;
+                                break;
+                            case 'paintColor':
+                                newItems[idx].paintColor = value;
+                                break;
+                            case 'paintCode':
+                                newItems[idx].paintCode = value;
+                                break;
+                            case 'glossPercentage':
+                                newItems[idx].glossPercentage = value;
+                                break;
+                            case 'veneer':
+                                newItems[idx].veneer = value;
+                                break;
+                            case 'notes':
+                                newItems[idx].notes = value;
+                                break;
+                        }
+                    }
+                });
+                setWoForm({ ...woForm, items: newItems });
+                alert(lang === 'ar'
+                    ? `✅ تم لصق ${values.length} قيمة${rowsNeeded > currentRows ? ` (تم إضافة ${rowsNeeded - currentRows} صف)` : ''}`
+                    : `✅ Pasted ${values.length} values${rowsNeeded > currentRows ? ` (added ${rowsNeeded - currentRows} rows)` : ''}`);
+            } else if (tableType === 'materials') {
+                let newMaterials = [...woForm.materials];
+
+                // Auto-create rows if needed
+                const rowsNeeded = values.length;
+                const currentRows = newMaterials.length;
+
+                if (rowsNeeded > currentRows) {
+                    const rowsToAdd = rowsNeeded - currentRows;
+                    for (let i = 0; i < rowsToAdd; i++) {
+                        newMaterials.push({
+                            id: `mat-${Date.now()}-${i}`,
+                            productName: '',
+                            quantity: 1,
+                            unit: 'لوح',
+                            category: 'wood' as const,
+                            isManual: true,
+                            size: { width: 0, length: 0 }
+                        });
+                    }
+                }
+
+                // Paste values
+                values.forEach((value, idx) => {
+                    if (idx < newMaterials.length) {
+                        switch (columnName) {
+                            case 'productName':
+                                newMaterials[idx].productName = value;
+                                break;
+                            case 'quantity':
+                                newMaterials[idx].quantity = parseFloat(value) || newMaterials[idx].quantity;
+                                break;
+                            case 'unit':
+                                newMaterials[idx].unit = value;
+                                break;
+                            case 'width':
+                                newMaterials[idx].size = { ...newMaterials[idx].size, width: parseInt(value) || 0 };
+                                break;
+                            case 'thickness':
+                                newMaterials[idx].size = { ...newMaterials[idx].size, thickness: parseInt(value) || 0 };
+                                break;
+                            case 'length':
+                                newMaterials[idx].size = { ...newMaterials[idx].size, length: parseInt(value) || 0 };
+                                break;
+                            case 'notes':
+                                newMaterials[idx].notes = value;
+                                break;
+                        }
+                    }
+                });
+                setWoForm({ ...woForm, materials: newMaterials });
+                alert(lang === 'ar'
+                    ? `✅ تم لصق ${values.length} قيمة${rowsNeeded > currentRows ? ` (تم إضافة ${rowsNeeded - currentRows} صف)` : ''}`
+                    : `✅ Pasted ${values.length} values${rowsNeeded > currentRows ? ` (added ${rowsNeeded - currentRows} rows)` : ''}`);
+            }
+
+        } catch (error) {
+            console.error('Column paste error:', error);
+            alert(lang === 'ar'
+                ? '❌ فشل اللصق. تأكد من نسخ القيم من Excel'
+                : '❌ Paste failed. Copy values from Excel first');
+        }
+    };
+
+    const handleEndDateSuggestion = (days: number) => {
+        const date = new Date();
+        date.setDate(date.getDate() + days);
+        setWoForm(prev => ({ ...prev, endDate: date.toISOString().split('T')[0] }));
+    };
+
+    // Save Work Order
+    const handleSaveWO = () => {
+        // Validation: Check if customer name is filled
+        if (!woForm.customerName || woForm.customerName.trim() === '') {
+            alert(lang === 'ar'
+                ? '⚠️ يرجى إدخال اسم العميل قبل الحفظ'
+                : '⚠️ Please enter customer name before saving');
+            return;
+        }
+
+        // Validation: Check if at least one item has a name
+        const hasValidItems = woForm.items.some(item => item.itemName && item.itemName.trim() !== '');
+
+        // Validation: Check if at least one material has a name
+        const hasValidMaterials = woForm.materials.some(mat => mat.productName && mat.productName.trim() !== '');
+
+        if (!hasValidItems && !hasValidMaterials) {
+            alert(lang === 'ar'
+                ? '⚠️ يرجى إضافة عنصر واحد على الأقل أو مادة واحدة قبل الحفظ'
+                : '⚠️ Please add at least one item or material before saving');
+            return;
+        }
+
+        // Filter out empty items and materials before saving
+        const validItems = woForm.items.filter(item => item.itemName && item.itemName.trim() !== '');
+        const validMaterials = woForm.materials.filter(mat => mat.productName && mat.productName.trim() !== '');
+
+        if (editingOrderId) {
+            // Update existing order - find the original order to preserve all fields
+            const originalOrder = workOrders.find(wo => wo.id === editingOrderId);
+            if (originalOrder) {
+                // Merge form data with original order data to preserve all fields
+                onUpdateWorkOrder(editingOrderId, {
+                    ...originalOrder,  // Keep all original fields
+                    ...woForm,         // Override with form data
+                    items: validItems,
+                    materials: validMaterials,
+                    // Don't update jobOrderDate on edit, keep original
+                });
+            } else {
+                console.error('⚠️ Original order not found:', editingOrderId);
+                alert(lang === 'ar' ? 'خطأ: لم يتم العثور على الأمر' : 'Error: Order not found');
+                return;
+            }
+        } else {
+            // Create new order
+            const newOrder = {
+                ...woForm,
+                items: validItems,
+                materials: validMaterials,
+                jobOrderDate: new Date().toISOString(),
+                status: 'planned' as const
+            };
+            onSaveWorkOrder(newOrder);
+        }
+
+        setShowWOModal(false);
+        setEditingOrderId(null);
+        resetForm();
+    };
+
+    // Print Functions
+    const openPrintPreview = (order: WorkOrder) => {
+        setSelectedOrder(order);
+        setShowPrintPreview(true);
+    };
+
+    const handlePrint = () => {
+        if (printRef.current) {
+            const order = selectedOrder!;
+
+            const formatDate = (dateString?: string) => {
+                if (!dateString) return '################';
+                const date = new Date(dateString);
+                const day = String(date.getDate()).padStart(2, '0');
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}/${month}/${year}`;
+            };
+
+            const getPriorityColor = () => {
+                if (order.priority === 'urgent') return '#ff9999'; // Stronger Red
+                if (order.priority === 'very_high') return '#ffcc80'; // Stronger Orange
+                if (order.priority === 'high') return '#ffeb99'; // Stronger Yellow
+                return '#fff'; // White for Normal
+            };
+
+            const printWindow = window.open('', '_blank');
+            if (printWindow) {
+                printWindow.document.write(`
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>Job Order - ${order.orderNumber}</title>
+                        <style>
+                            * { margin: 0; padding: 0; box-sizing: border-box; }
+                            body { 
+                                font-family: Arial, sans-serif; 
+                                font-size: 8pt; 
+                                color: #000;
+                                padding: 8mm;
+                            }
+                            
+                            table { 
+                                width: 100%; 
+                                border-collapse: collapse; 
+                                margin-bottom: 2px;
+                            }
+                            
+                            th, td { 
+                                border: 1px solid #000; 
+                                padding: 1px 2px;
+                                text-align: center;
+                                vertical-align: middle;
+                                font-size: 7.5pt;
+                                height: 18px;
+                                white-space: nowrap;
+                                overflow: hidden;
+                            }
+                            
+                            th { 
+                                background-color: #d9d9d9; 
+                                font-weight: bold; 
+                                font-size: 7pt;
+                            }
+                            
+                            .text-left { text-align: left; padding-left: 3px; }
+                            .text-right { text-align: right; padding-right: 3px; }
+                            
+                            .company-header {
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: flex-start;
+                                margin-bottom: 5px;
+                                padding-bottom: 3px;
+                            }
+                            
+                            .company-info {
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                            }
+                            
+                            .logo-circle {
+                                width: 50px;
+                                height: 50px;
+                                border: 2px solid #8B4513;
+                                border-radius: 50%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                font-size: 6pt;
+                                font-weight: bold;
+                                color: #8B4513;
+                                text-align: center;
+                                line-height: 1.1;
+                            }
+                            
+                            .company-details {
+                                font-size: 7pt;
+                                line-height: 1.3;
+                            }
+                            
+                            .company-details strong {
+                                font-size: 8pt;
+                                display: block;
+                            }
+                            
+                            .po-number {
+                                text-align: center;
+                                font-size: 14pt;
+                                font-weight: bold;
+                                flex: 1;
+                                padding-top: 15px;
+                            }
+                            
+                            .arabic-info {
+                                text-align: right;
+                                font-size: 6.5pt;
+                                line-height: 1.3;
+                                direction: rtl;
+                            }
+                            
+                            .header-table td {
+                                font-weight: bold;
+                                font-size: 7.5pt;
+                                padding: 3px;
+                            }
+                            
+                            @media print {
+                                @page { size: portrait; margin: 5mm; }
+                                body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <!-- Company Header with Logo -->
+                        <div class="company-header">
+                            <div class="company-info">
+                                <img src="/LOGO11.png" style="height: 50px; width: 50px;" alt="Logo" onerror="this.style.display='none'"/>
+                                <div class="company-details">
+                                    <strong>FOREST EDGE FACTORY</strong>
+                                    Saudi Arabia - Riyadh<br>
+                                    C.R: 7050835193<br>
+                                    Vat No.: 313142044200003
+                                </div>
+                            </div>
+                            
+                            <div class="po-number">${order.orderNumber}</div>
+                            
+                            <div class="arabic-info">
+                                المملكة العربية السعودية – الرياض<br>
+                                منطقة الخرج الصناعية بالرياض<br>
+                                حي المعذر الشمالي لالامير تركي بن عبد العزيز<br>
+                                س ت: 7050835193<br>
+                                رقم ضريبي: 313142044200003
+                            </div>
+                        </div>
+
+                        <!-- Header Table -->
+                        <table class="header-table">
+                            <tr>
+                                <th style="width: 14%;">Job Order Date</th>
+                                <th style="width: 14%;">Job Order No.</th>
+                                <th style="width: 28%;">CLIENT</th>
+                                <th style="width: 14%;">Start Date</th>
+                                <th style="width: 20%;">End Date</th>
+                                <th style="width: 10%;">Priority</th>
+                            </tr>
+                            <tr>
+                                <td>${formatDate(order.jobOrderDate)}</td>
+                                <td>${order.jobOrderNumber}</td>
+                                <td>${order.customerName}</td>
+                                <td>${formatDate(order.startDate)}</td>
+                                <td>${order.endDate ? formatDate(order.endDate) : '################'}</td>
+                                <td style="background-color: ${getPriorityColor()}">${order.priority === 'very_high' ? 'Very High' : order.priority === 'high' ? 'High' : order.priority === 'urgent' ? 'Urgent' : 'Normal'}</td>
+                            </tr>
+                        </table>
+
+                        <!-- Items Table -->
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" style="width: 3%;">NO.</th>
+                                    <th rowspan="2" style="width: 22%;">ITEM</th>
+                                    <th rowspan="2" style="width: 4%;">Q.T.Y</th>
+                                    <th colspan="3" style="width: 12%;">FINAL DIM. (mm)</th>
+                                    <th rowspan="2" style="width: 10%;">MODEL CODE</th>
+                                    <th colspan="2" style="width: 16%;">PAINT</th>
+                                    <th rowspan="2" style="width: 6%;">GLOSSY %</th>
+                                    <th rowspan="2" style="width: 5%;">VENEER</th>
+                                    <th rowspan="2" style="width: 15%;">NOTE</th>
+                                </tr>
+                                <tr>
+                                    <th style="width: 4%;">H</th>
+                                    <th style="width: 4%;">L</th>
+                                    <th style="width: 4%;">W</th>
+                                    <th style="width: 8%;">COLOR</th>
+                                    <th style="width: 8%;">CODE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${(() => {
+                        const minRows = 12;
+                        const totalRows = Math.max(order.items.length, minRows);
+                        return Array.from({ length: totalRows }).map((_, index) => {
+                            const item = order.items[index];
+                            return `
+                                        <tr>
+                                            <td>${index + 1}</td>
+                                            <td class="text-left">${item?.itemName || ''}</td>
+                                            <td>${item?.quantity || ''}</td>
+                                            <td>${item?.dimensions?.height || ''}</td>
+                                            <td>${item?.dimensions?.length || ''}</td>
+                                            <td>${item?.dimensions?.width || ''}</td>
+                                            <td>${item?.modelCode || ''}</td>
+                                            <td>${item?.paintColor || ''}</td>
+                                            <td style="font-size: 6.5pt;">${item?.paintCode || ''}</td>
+                                            <td>${item ? item.glossPercentage + '%' : ''}</td>
+                                            <td>${item?.veneer || ''}</td>
+                                            <td class="text-left" style="font-size: 6.5pt;">${item?.notes || ''}</td>
+                                        </tr>`;
+                        }).join('');
+                    })()}
+                            </tbody>
+                        </table>
+
+                        ${order.materials && order.materials.length > 0 ? `
+                        <!-- Material Request Section -->
+                        <div style="margin-top: 4px;">
+                            <div style="background-color: #d9d9d9; border: 1px solid #000; text-align: center; padding: 3px; font-weight: bold; font-size: 8pt;">
+                                MATERIAL REQUEST
+                            </div>
+                            
+                            <table style="margin-bottom: 0;">
+                                <tr>
+                                    <!-- WOOD Section -->
+                                    <td rowspan="100" style="width: 3%; background-color: #d9d9d9; padding: 0; border-right: 2px solid #000;">
+                                        <div style="writing-mode: vertical-rl; transform: rotate(180deg); font-weight: bold; font-size: 8pt; padding: 12px 2px;">WOOD</div>
+                                    </td>
+                                    <th style="width: 20%;">MATERIAL NAME</th>
+                                    <th style="width: 5%;">QTY</th>
+                                    <th style="width: 6%;">UNIT</th>
+                                    <th style="width: 4%;">W</th>
+                                    <th style="width: 4%;">L</th>
+                                    
+                                    <!-- ACCESSORIES Section -->
+                                    <td rowspan="100" style="width: 3%; background-color: #d9d9d9; padding: 0; border-left: 2px solid #000; border-right: 2px solid #000;">
+                                        <div style="writing-mode: vertical-rl; transform: rotate(180deg); font-weight: bold; font-size: 8pt; padding: 12px 2px;">ACCESSORIES</div>
+                                    </td>
+                                    <th style="width: 20%;">MATERIAL NAME</th>
+                                    <th style="width: 5%;">QTY</th>
+                                    <th style="width: 30%;">NOTES</th>
+                                </tr>
+                                ${(() => {
+                            const woodMaterials = order.materials.filter(m => m.category === 'wood' || m.category === 'other');
+                            const accessoriesMaterials = order.materials.filter(m => m.category === 'accessories');
+                            const minRows = 30;
+                            const maxRows = Math.max(woodMaterials.length, accessoriesMaterials.length, minRows);
+
+                            return Array.from({ length: maxRows }).map((_, i) => {
+                                const wood = woodMaterials[i];
+                                const acc = accessoriesMaterials[i];
+                                return `
+                                        <tr>
+                                            <td class="text-left" style="font-size: 7pt;">${wood?.productName || ''}</td>
+                                            <td>${wood?.quantity || ''}</td>
+                                            <td>${wood?.unit || ''}</td>
+                                            <td>${wood?.size?.width || ''}</td>
+                                            <td>${wood?.size?.length || ''}</td>
+                                            
+                                            <td class="text-left" style="font-size: 7pt;">${acc?.productName || ''}</td>
+                                            <td>${acc?.quantity || ''}</td>
+                                            <td class="text-left" style="font-size: 6.5pt;">${acc?.notes || ''}</td>
+                                        </tr>`;
+                            }).join('');
+                        })()}
+                            </table>
+                        </div>
+                        ` : ''}
+
+                        <!-- Footer -->
+                        <div style="display: flex; justify-content: space-between; margin-top: 15px; font-size: 7.5pt;">
+                            <div style="text-align: center;">
+                                <div>Prepared By: ___________________</div>
+                                <div style="margin-top: 15px; font-weight: bold;">Engneering Dept.</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div>Engr: Sabry Mahfouz</div>
+                                <div style="margin-top: 15px; font-weight: bold;">Operation Manager</div>
+                            </div>
+                            <div style="text-align: center;">
+                                <div>Recived By: ___________________</div>
+                                <div style="margin-top: 15px; font-weight: bold;">Production Dept.</div>
+                            </div>
+                        </div>
+                    </body>
+                    </html>
+                `);
+                printWindow.document.close();
+                setTimeout(() => printWindow.print(), 500);
+            }
+        }
+    };
+
+    const getPriorityLabel = (priority: string) => {
+        const labels: any = {
+            normal: { ar: 'عادي', en: 'Normal' },
+            high: { ar: 'عالي', en: 'High' },
+            very_high: { ar: 'عالي جداً', en: 'Very High' },
+            urgent: { ar: 'عاجل', en: 'Urgent' }
+        };
+        return lang === 'ar' ? labels[priority]?.ar : labels[priority]?.en;
+    };
+
+    const getStatusLabel = (status: string) => {
+        const labels: any = {
+            planned: { ar: 'مخطط', en: 'Planned', color: 'bg-slate-100 text-slate-700' },
+            in_progress: { ar: 'قيد التنفيذ', en: 'In Progress', color: 'bg-blue-100 text-blue-700' },
+            completed: { ar: 'مكتمل', en: 'Completed', color: 'bg-green-100 text-green-700' },
+            cancelled: { ar: 'ملغي', en: 'Cancelled', color: 'bg-red-100 text-red-700' }
+        };
+        return labels[status] || labels.planned;
+    };
+
+    return (
+        <div className="p-6">
+            <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-bold text-slate-800">{lang === 'ar' ? 'أوامر العمل' : 'Work Orders'}</h2>
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => setShowSummaryPrint(true)}
+                        className="bg-amber-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-amber-800 transition-colors"
+                        title={lang === 'ar' ? 'طباعة ملخص جميع الأوامر' : 'Print All Orders Summary'}
+                    >
+                        <FileText size={18} /> {lang === 'ar' ? 'ملخص أوامر العمل' : 'Orders Summary'}
+                    </button>
+                    <button onClick={openNewOrderModal} className="bg-slate-800 text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-slate-700 transition-colors">
+                        <Plus size={18} /> {lang === 'ar' ? 'أمر عمل جديد' : 'New Work Order'}
+                    </button>
+                </div>
+            </div>
+
+            {/* Work Orders List */}
+            <div className="space-y-3">
+                {workOrders.length === 0 ? (
+                    <div className="bg-white rounded-xl border p-12 text-center text-slate-400">
+                        <p>{lang === 'ar' ? 'لا توجد أوامر عمل حتى الآن' : 'No work orders yet'}</p>
+                    </div>
+                ) : (
+                    workOrders.map((wo) => {
+                        const statusInfo = getStatusLabel(wo.status);
+                        const isExpanded = expandedOrder === wo.id;
+
+                        return (
+                            <div key={wo.id} className="bg-white rounded-xl border overflow-hidden hover:shadow-md transition-shadow">
+                                {/* Header Row */}
+                                <div className="p-4 flex items-center justify-between cursor-pointer" onClick={() => setExpandedOrder(isExpanded ? null : wo.id)}>
+                                    <div className="flex items-center gap-4">
+                                        <div className="text-center">
+                                            <p className="text-lg font-bold text-slate-800 font-mono">{wo.orderNumber}</p>
+                                            <p className="text-xs text-slate-400">{wo.jobOrderNumber}</p>
+                                        </div>
+                                        <div className="border-r border-slate-200 h-10 mx-2"></div>
+                                        <div>
+                                            <p className="font-semibold text-slate-700">{wo.customerName}</p>
+                                            <p className="text-xs text-slate-400">{new Date(wo.jobOrderDate).toLocaleDateString('ar-SA')}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusInfo.color}`}>
+                                            {lang === 'ar' ? statusInfo.ar : statusInfo.en}
+                                        </span>
+                                        <span className={`px-2 py-1 rounded text-xs ${wo.priority === 'urgent' || wo.priority === 'very_high' ? 'bg-red-100 text-red-700' : 'bg-slate-100 text-slate-600'}`}>
+                                            {getPriorityLabel(wo.priority)}
+                                        </span>
+                                        {isExpanded ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+                                    </div>
+                                </div>
+
+                                {/* Expanded Content */}
+                                {isExpanded && (
+                                    <div className="border-t px-4 py-3 bg-slate-50">
+                                        {/* Items Summary */}
+                                        <div className="mb-3">
+                                            <p className="text-xs font-medium text-slate-500 mb-1">{lang === 'ar' ? 'العناصر:' : 'Items:'}</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {wo.items?.slice(0, 3).map((item, idx) => (
+                                                    <span key={idx} className="bg-white px-2 py-1 rounded text-xs border">
+                                                        {item.itemName} ({item.quantity})
+                                                    </span>
+                                                ))}
+                                                {wo.items?.length > 3 && (
+                                                    <span className="text-xs text-slate-400">+{wo.items.length - 3} {lang === 'ar' ? 'أخرى' : 'more'}</span>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Materials Summary */}
+                                        <div className="mb-3">
+                                            <p className="text-xs font-medium text-slate-500 mb-1">{lang === 'ar' ? 'المواد المطلوبة:' : 'Materials:'}</p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {wo.materials?.slice(0, 4).map((mat, idx) => (
+                                                    <span key={idx} className="bg-amber-50 text-amber-700 px-2 py-1 rounded text-xs border border-amber-200">
+                                                        {mat.productName}: {mat.quantity} {mat.unit}
+                                                    </span>
+                                                ))}
+                                                {wo.materials?.length > 4 && (
+                                                    <span className="text-xs text-slate-400">+{wo.materials.length - 4}</span>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {/* Actions */}
+                                        <div className="flex gap-2 pt-2 border-t">
+                                            <button onClick={() => openPrintPreview(wo)} className="flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-600 rounded hover:bg-blue-100 text-sm">
+                                                <Printer size={14} /> {lang === 'ar' ? 'طباعة' : 'Print'}
+                                            </button>
+                                            {wo.status !== 'completed' && wo.status !== 'cancelled' && (
+                                                <button onClick={(e) => { e.stopPropagation(); openEditOrderModal(wo); }} className="flex items-center gap-1 px-3 py-1.5 bg-amber-50 text-amber-600 rounded hover:bg-amber-100 text-sm">
+                                                    <Edit3 size={14} /> {lang === 'ar' ? 'تعديل' : 'Edit'}
+                                                </button>
+                                            )}
+                                            {(wo.status === 'planned' || !wo.status) && (
+                                                <button onClick={() => onExecuteWorkOrder(wo.id)} className="flex items-center gap-1 px-3 py-1.5 bg-green-50 text-green-600 rounded hover:bg-green-100 text-sm">
+                                                    <Play size={14} /> {lang === 'ar' ? 'تنفيذ وصرف المواد' : 'Execute & Deduct'}
+                                                </button>
+                                            )}
+                                            <button onClick={() => onDeleteWorkOrder(wo.id)} className="flex items-center gap-1 px-3 py-1.5 bg-red-50 text-red-600 rounded hover:bg-red-100 text-sm mr-auto">
+                                                <Trash2 size={14} /> {lang === 'ar' ? 'حذف' : 'Delete'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })
+                )}
+            </div>
+
+            {/* New/Edit Work Order Modal */}
+            {showWOModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+                    <div className="bg-white rounded-xl w-full max-w-[95vw] max-h-[95vh] overflow-hidden flex flex-col">
+                        <div className="p-4 border-b flex justify-between items-center bg-slate-50">
+                            <h3 className="font-bold text-lg">{editingOrderId ? (lang === 'ar' ? 'تعديل أمر العمل' : 'Edit Work Order') : (lang === 'ar' ? 'أمر عمل جديد' : 'New Work Order')}</h3>
+                            <button onClick={() => { setShowWOModal(false); setEditingOrderId(null); resetForm(); }} className="p-1 hover:bg-slate-200 rounded"><X size={20} /></button>
+                        </div>
+
+                        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                            {/* Basic Info - Redesigned with Work Order No. on top */}
+                            <div className="bg-gradient-to-r from-slate-50 to-blue-50 border-2 border-slate-200 rounded-xl p-8 shadow-sm">
+                                {/* Row 1: Work Order Number - Centered and Distinct */}
+                                <div className="mb-8 flex flex-col items-center">
+                                    <label className="block text-base font-bold text-slate-700 mb-3 uppercase tracking-wide text-center">{lang === 'ar' ? 'رقم أمر العمل' : 'Work Order No.'}</label>
+                                    <input type="text" value={woForm.orderNumber} onChange={e => setWoForm({ ...woForm, orderNumber: e.target.value })}
+                                        className="w-full max-w-sm border-2 border-blue-500 rounded-xl px-4 py-3 text-xl font-mono font-bold bg-white text-blue-700 focus:border-blue-600 focus:ring-4 focus:ring-blue-100 transition-all shadow-md text-center outline-none" />
+                                </div>
+
+                                {/* Row 2: Info Grid - Centered Max Width for Professional Look */}
+                                <div className="max-w-6xl mx-auto">
+                                    <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-end">
+                                        {/* Job Order & Customer - Larger width */}
+                                        <div className="md:col-span-2">
+                                            <label className="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wide text-center uppercase">{lang === 'ar' ? 'رقم الطلب' : 'Job Order'}</label>
+                                            <input type="text" value={woForm.jobOrderNumber} onChange={e => setWoForm({ ...woForm, jobOrderNumber: e.target.value })}
+                                                className="w-full border-2 border-slate-300 rounded-lg px-3 h-11 text-sm font-mono font-semibold bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all shadow-sm text-center" />
+                                        </div>
+                                        <div className="md:col-span-4">
+                                            <label className="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wide text-center uppercase">
+                                                {lang === 'ar' ? 'اسم العميل' : 'Customer'} <span className="text-red-500">*</span>
+                                            </label>
+                                            <AutoCompleteInput
+                                                value={woForm.customerName}
+                                                onChange={(value) => setWoForm({ ...woForm, customerName: value })}
+                                                suggestions={autoCompleteService.getSuggestions('customers')}
+                                                placeholder={lang === 'ar' ? 'اسم العميل' : 'Customer Name'}
+                                                className="w-full border-2 border-slate-300 rounded-lg px-3 h-11 text-sm font-medium bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all shadow-sm text-center"
+                                            />
+                                        </div>
+
+                                        {/* Dates & Priority - Compact width */}
+                                        <div className="md:col-span-2">
+                                            <label className="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wide text-center uppercase">{lang === 'ar' ? 'الأولوية' : 'Priority'}</label>
+                                            <select value={woForm.priority} onChange={e => setWoForm({ ...woForm, priority: e.target.value as any })}
+                                                className="w-full border-2 border-slate-300 rounded-lg px-3 h-11 text-sm font-medium bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all shadow-sm text-center">
+                                                <option value="normal">{lang === 'ar' ? 'عادي' : 'Normal'}</option>
+                                                <option value="high">{lang === 'ar' ? 'عالي' : 'High'}</option>
+                                                <option value="very_high">{lang === 'ar' ? 'عالي جداً' : 'Very High'}</option>
+                                                <option value="urgent">{lang === 'ar' ? 'عاجل' : 'Urgent'}</option>
+                                            </select>
+                                        </div>
+                                        <div className="md:col-span-2">
+                                            <label className="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wide text-center uppercase">{lang === 'ar' ? 'تاريخ البدء' : 'Start Date'}</label>
+                                            <input
+                                                type="text"
+                                                value={woForm.startDate}
+                                                onChange={e => setWoForm({ ...woForm, startDate: e.target.value })}
+                                                placeholder="YYYY-MM-DD"
+                                                className="w-full border-2 border-slate-300 rounded-lg px-3 h-11 text-sm font-medium bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all shadow-sm text-center uppercase"
+                                            />
+                                        </div>
+                                        <div className="md:col-span-2">
+                                            <label className="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wide text-center uppercase">{lang === 'ar' ? 'تاريخ الانتهاء' : 'End Date'}</label>
+                                            <div className="flex flex-col gap-2">
+                                                <input
+                                                    type="text"
+                                                    value={woForm.endDate}
+                                                    onChange={e => setWoForm({ ...woForm, endDate: e.target.value })}
+                                                    placeholder="YYYY-MM-DD"
+                                                    className="w-full border-2 border-slate-300 rounded-lg px-3 h-11 text-sm font-medium bg-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all shadow-sm text-center uppercase"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {/* Quick Date Suggestions */}
+                                    <div className="flex justify-end gap-2 mt-4 px-1">
+                                        {[5, 10, 15, 30].map(d => (
+                                            <button key={d} type="button" onClick={() => handleEndDateSuggestion(d)}
+                                                className="px-3 py-1 bg-white hover:bg-blue-50 text-xs rounded-full border border-slate-300 hover:border-blue-400 text-slate-600 font-semibold transition-all shadow-sm">
+                                                +{d} {lang === 'ar' ? 'أيام' : 'Days'}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>    {/* Items Section */}
+                            <div className="border-2 border-slate-300 rounded-lg overflow-hidden shadow-sm">
+                                <div className="bg-gradient-to-r from-slate-100 to-slate-200 px-5 py-3 flex justify-between items-center border-b-2 border-slate-300">
+                                    <h4 className="font-bold text-base text-slate-800">{lang === 'ar' ? 'المنتجات المطلوب تصنيعها' : 'Items to Manufacture'}</h4>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={handlePasteFromExcel}
+                                            className="bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-700 flex items-center gap-2 transition-colors shadow-sm"
+                                            title={lang === 'ar' ? 'لصق من Excel' : 'Paste from Excel'}
+                                        >
+                                            📋 {lang === 'ar' ? 'لصق Excel' : 'Paste Excel'}
+                                        </button>
+                                        <button onClick={addItem} className="bg-blue-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 flex items-center gap-2 transition-colors shadow-sm">
+                                            <Plus size={16} /> {lang === 'ar' ? 'إضافة' : 'Add'}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-xs border-collapse">
+                                        <thead className="bg-slate-200">
+                                            <tr>
+                                                <th rowSpan={2} className="border-2 border-slate-400 p-1 text-center min-w-[32px] font-bold text-slate-800 text-[10px]">NO.</th>
+                                                <th
+                                                    rowSpan={2}
+                                                    className="border-2 border-slate-400 p-1 text-center min-w-[120px] font-bold text-slate-800 text-[10px] cursor-pointer hover:bg-blue-100 transition-colors"
+                                                    onDoubleClick={() => handleColumnPaste('itemName', 'items')}
+                                                    title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                >
+                                                    ITEM
+                                                </th>
+                                                <th
+                                                    rowSpan={2}
+                                                    className="border-2 border-slate-400 p-1 text-center min-w-[40px] font-bold text-slate-800 text-[10px] cursor-pointer hover:bg-blue-100 transition-colors"
+                                                    onDoubleClick={() => handleColumnPaste('quantity', 'items')}
+                                                    title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                >
+                                                    Q.T.Y
+                                                </th>
+                                                <th colSpan={3} className="border-2 border-slate-400 p-1 text-center font-bold text-slate-800 text-[10px]">FINAL DIM. (mm)</th>
+                                                <th
+                                                    rowSpan={2}
+                                                    className="border-2 border-slate-400 p-1 text-center min-w-[80px] font-bold text-slate-800 text-[10px] cursor-pointer hover:bg-blue-100 transition-colors"
+                                                    onDoubleClick={() => handleColumnPaste('modelCode', 'items')}
+                                                    title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                >
+                                                    MODEL CODE
+                                                </th>
+                                                <th colSpan={2} className="border-2 border-slate-400 p-1 text-center font-bold text-slate-800 text-[10px]">PAINT</th>
+                                                <th
+                                                    rowSpan={2}
+                                                    className="border-2 border-slate-400 p-1 text-center w-12 font-bold text-slate-800 text-[10px] cursor-pointer hover:bg-blue-100 transition-colors"
+                                                    onDoubleClick={() => handleColumnPaste('glossPercentage', 'items')}
+                                                    title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                >
+                                                    GLOSSY %
+                                                </th>
+                                                <th
+                                                    rowSpan={2}
+                                                    className="border-2 border-slate-400 p-1 text-center w-16 font-bold text-slate-800 text-[10px] cursor-pointer hover:bg-blue-100 transition-colors"
+                                                    onDoubleClick={() => handleColumnPaste('veneer', 'items')}
+                                                    title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                >
+                                                    VENEER
+                                                </th>
+                                                <th
+                                                    rowSpan={2}
+                                                    className="border-2 border-slate-400 p-1 text-center min-w-[120px] font-bold text-slate-800 text-[10px] cursor-pointer hover:bg-blue-100 transition-colors"
+                                                    onDoubleClick={() => handleColumnPaste('notes', 'items')}
+                                                    title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                >
+                                                    NOTES
+                                                </th>
+                                                <th rowSpan={2} className="border-2 border-slate-400 p-1 w-8"></th>
+                                            </tr>
+                                            <tr>
+                                                <th
+                                                    className="border-2 border-slate-400 p-1 text-center w-16 font-bold text-slate-800 text-[10px] cursor-pointer hover:bg-blue-100 transition-colors"
+                                                    onDoubleClick={() => handleColumnPaste('width', 'items')}
+                                                    title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                >
+                                                    W
+                                                </th>
+                                                <th
+                                                    className="border-2 border-slate-400 p-1 text-center w-16 font-bold text-slate-800 text-[10px] cursor-pointer hover:bg-blue-100 transition-colors"
+                                                    onDoubleClick={() => handleColumnPaste('length', 'items')}
+                                                    title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                >
+                                                    L
+                                                </th>
+                                                <th
+                                                    className="border-2 border-slate-400 p-1 text-center w-16 font-bold text-slate-800 text-[10px] cursor-pointer hover:bg-blue-100 transition-colors"
+                                                    onDoubleClick={() => handleColumnPaste('height', 'items')}
+                                                    title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                >
+                                                    H
+                                                </th>
+                                                <th
+                                                    className="border-2 border-slate-400 p-1 text-center min-w-[80px] font-bold text-slate-800 text-[10px] cursor-pointer hover:bg-blue-100 transition-colors"
+                                                    onDoubleClick={() => handleColumnPaste('paintColor', 'items')}
+                                                    title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                >
+                                                    COLOR
+                                                </th>
+                                                <th
+                                                    className="border-2 border-slate-400 p-1 text-center min-w-[80px] font-bold text-slate-800 text-[10px] cursor-pointer hover:bg-blue-100 transition-colors"
+                                                    onDoubleClick={() => handleColumnPaste('paintCode', 'items')}
+                                                    title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                >
+                                                    CODE
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {woForm.items.map((item, idx) => (
+                                                <tr key={item.id} className="border-t hover:bg-blue-50/50 transition-colors">
+                                                    <td className="border-r border-slate-200 p-1 text-center font-bold text-slate-500 bg-slate-50">{idx + 1}</td>
+                                                    <td className="border-r border-slate-200 p-1">
+                                                        <AutoCompleteInput
+                                                            value={item.itemName}
+                                                            onChange={(value) => updateItem(idx, 'itemName', value)}
+                                                            suggestions={autoCompleteService.getSuggestions('itemNames', item.itemName)}
+                                                            placeholder={lang === 'ar' ? 'اسم المنتج' : 'Item Name'}
+                                                            className="w-full border border-slate-300 rounded px-1 min-h-[32px] text-[11px] font-medium focus:border-blue-500 focus:ring-1 focus:ring-blue-100 transition-all text-center"
+                                                        />
+                                                    </td>
+                                                    <td className="border-r border-slate-200 p-1">
+                                                        <input
+                                                            type="text"
+                                                            inputMode="numeric"
+                                                            pattern="[0-9]*"
+                                                            value={item.quantity === 0 ? '' : item.quantity}
+                                                            onChange={e => {
+                                                                const numericValue = e.target.value.replace(/\D/g, '');
+                                                                updateItem(idx, 'quantity', numericValue === '' ? 1 : parseInt(numericValue, 10));
+                                                            }}
+                                                            className="w-full border border-slate-300 rounded px-1 min-h-[32px] text-xs font-bold text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-100 transition-all bg-white"
+                                                            placeholder="1"
+                                                        />
+                                                    </td>
+                                                    <td className="border-r border-slate-200 p-1">
+                                                        <input
+                                                            type="text"
+                                                            inputMode="numeric"
+                                                            pattern="[0-9]*"
+                                                            value={item.dimensions?.width === 0 ? '' : (item.dimensions?.width || '')}
+                                                            onChange={e => {
+                                                                const numericValue = e.target.value.replace(/\D/g, '');
+                                                                updateItem(idx, 'dimensions.width', numericValue === '' ? 0 : parseInt(numericValue, 10));
+                                                            }}
+                                                            className="w-full border border-slate-300 rounded px-1 min-h-[32px] text-[11px] font-bold text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-100 transition-all"
+                                                            placeholder="W"
+                                                        />
+                                                    </td>
+                                                    <td className="border-r border-slate-200 p-1">
+                                                        <input
+                                                            type="text"
+                                                            inputMode="numeric"
+                                                            pattern="[0-9]*"
+                                                            value={item.dimensions?.length === 0 ? '' : (item.dimensions?.length || '')}
+                                                            onChange={e => {
+                                                                const numericValue = e.target.value.replace(/\D/g, '');
+                                                                updateItem(idx, 'dimensions.length', numericValue === '' ? 0 : parseInt(numericValue, 10));
+                                                            }}
+                                                            className="w-full border border-slate-300 rounded px-1 min-h-[32px] text-[11px] font-bold text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-100 transition-all"
+                                                            placeholder="L"
+                                                        />
+                                                    </td>
+                                                    <td className="border-r border-slate-200 p-1">
+                                                        <input
+                                                            type="text"
+                                                            inputMode="numeric"
+                                                            pattern="[0-9]*"
+                                                            value={item.dimensions?.height === 0 ? '' : (item.dimensions?.height || '')}
+                                                            onChange={e => {
+                                                                const numericValue = e.target.value.replace(/\D/g, '');
+                                                                updateItem(idx, 'dimensions.height', numericValue === '' ? 0 : parseInt(numericValue, 10));
+                                                            }}
+                                                            className="w-full border border-slate-300 rounded px-1 min-h-[32px] text-[11px] font-bold text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-100 transition-all"
+                                                            placeholder="H"
+                                                        />
+                                                    </td>
+                                                    <td className="border-r border-slate-200 p-1">
+                                                        <AutoCompleteInput
+                                                            value={item.modelCode || ''}
+                                                            onChange={(value) => updateItem(idx, 'modelCode', value)}
+                                                            suggestions={autoCompleteService.getSuggestions('modelCodes', item.modelCode)}
+                                                            placeholder="Code"
+                                                            className="w-full border border-slate-300 rounded px-1 min-h-[32px] text-[11px] font-medium text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-100 transition-all"
+                                                        />
+                                                    </td>
+                                                    <td className="border-r border-slate-200 p-1">
+                                                        <AutoCompleteInput
+                                                            value={item.paintColor || ''}
+                                                            onChange={(value) => updateItem(idx, 'paintColor', value)}
+                                                            suggestions={autoCompleteService.getSuggestions('commonPhrases', item.paintColor)}
+                                                            placeholder="Color"
+                                                            className="w-full border border-slate-300 rounded px-1 min-h-[32px] text-[11px] font-medium text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-100 transition-all"
+                                                        />
+                                                    </td>
+                                                    <td className="border-r border-slate-200 p-1">
+                                                        <AutoCompleteInput
+                                                            value={item.paintCode || ''}
+                                                            onChange={(value) => updateItem(idx, 'paintCode', value)}
+                                                            suggestions={autoCompleteService.getSuggestions('paintCodes', item.paintCode)}
+                                                            placeholder="Code"
+                                                            className="w-full border border-slate-300 rounded px-1 min-h-[32px] text-[11px] font-medium text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-100 transition-all"
+                                                        />
+                                                    </td>
+                                                    <td className="border-r border-slate-200 p-1">
+                                                        <input
+                                                            type="text"
+                                                            value={item.glossPercentage === 0 || item.glossPercentage === '' ? '' : item.glossPercentage}
+                                                            onChange={e => updateItem(idx, 'glossPercentage', e.target.value)}
+                                                            className="w-full border border-slate-300 rounded px-1 min-h-[32px] text-[11px] font-bold text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-100 transition-all"
+                                                            placeholder=""
+                                                        />
+                                                    </td>
+                                                    <td className="border-r border-slate-200 p-1">
+                                                        <select value={item.veneer || 'NO'} onChange={e => updateItem(idx, 'veneer', e.target.value)}
+                                                            className="w-full border border-slate-300 rounded px-1 min-h-[32px] text-[10px] font-bold focus:border-blue-500 focus:ring-1 focus:ring-blue-100 transition-all">
+                                                            <option value="NO">NO</option>
+                                                            <option value="YES">YES</option>
+                                                        </select>
+                                                    </td>
+                                                    <td className="border-r border-slate-200 p-1">
+                                                        <AutoCompleteInput
+                                                            value={item.notes || ''}
+                                                            onChange={(value) => updateItem(idx, 'notes', value)}
+                                                            suggestions={autoCompleteService.getSuggestions('commonPhrases', item.notes)}
+                                                            placeholder={lang === 'ar' ? 'ملاحظات' : 'Notes'}
+                                                            className="w-full border border-slate-300 rounded px-1 min-h-[32px] text-[11px] focus:border-blue-500 focus:ring-1 focus:ring-blue-100 transition-all"
+                                                        />
+                                                    </td>
+                                                    <td className="p-1 text-center">
+                                                        <button onClick={() => removeItem(idx)} className="text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors opacity-60 hover:opacity-100">
+                                                            <Trash2 size={16} />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                            {/* Materials Section - 2 Tables: Wood & Hardware */}
+                            <div className="space-y-4">
+                                {/* Wood Materials Table */}
+                                <div className="border-2 border-stone-200 rounded-lg overflow-hidden shadow-sm">
+                                    <div className="bg-gradient-to-r from-stone-50 to-amber-50 px-5 py-3 flex justify-between items-center border-b-2 border-stone-200">
+                                        <h4 className="font-bold text-base text-stone-700">{lang === 'ar' ? 'المواد الخشبية (Wood Materials)' : 'Wood Materials'}</h4>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={handlePasteWoodMaterials}
+                                                className="bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-700 flex items-center gap-2 transition-colors shadow-sm"
+                                                title={lang === 'ar' ? 'لصق من Excel' : 'Paste from Excel'}
+                                            >
+                                                📋 {lang === 'ar' ? 'لصق Excel' : 'Paste Excel'}
+                                            </button>
+                                            <button onClick={() => { const newMat: MaterialRequest = { id: `mat-${Date.now()}`, productName: '', quantity: 1, unit: 'لوح', category: 'wood', isManual: true, size: { width: 0, length: 0 } }; setWoForm({ ...woForm, materials: [...woForm.materials, newMat] }); }} className="bg-amber-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-amber-700 flex items-center gap-2 transition-colors shadow-sm">
+                                                <Plus size={16} /> {lang === 'ar' ? 'إضافة' : 'Add'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="p-4">
+                                        {woForm.materials.filter(m => m.category === 'wood').length > 0 ? (
+                                            <table className="w-full text-xs border-collapse">
+                                                <thead className="bg-stone-100">
+                                                    <tr>
+                                                        <th className="border-2 border-stone-300 p-1 text-center min-w-[32px] font-bold text-stone-700 text-[10px]">NO.</th>
+                                                        <th
+                                                            className="border-2 border-stone-300 p-1 text-right font-bold text-stone-700 text-[10px] cursor-pointer hover:bg-amber-100 transition-colors"
+                                                            onDoubleClick={() => handleColumnPaste('productName', 'materials')}
+                                                            title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                        >
+                                                            {lang === 'ar' ? 'اسم المادة' : 'Material Name'}
+                                                        </th>
+                                                        <th
+                                                            className="border-2 border-stone-300 p-1 text-center min-w-[40px] font-bold text-stone-700 text-[10px] cursor-pointer hover:bg-amber-100 transition-colors"
+                                                            onDoubleClick={() => handleColumnPaste('quantity', 'materials')}
+                                                            title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                        >
+                                                            {lang === 'ar' ? 'الكمية' : 'QTY'}
+                                                        </th>
+                                                        <th
+                                                            className="border-2 border-stone-300 p-1 text-center w-16 font-bold text-stone-700 text-[10px] cursor-pointer hover:bg-amber-100 transition-colors"
+                                                            onDoubleClick={() => handleColumnPaste('unit', 'materials')}
+                                                            title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                        >
+                                                            {lang === 'ar' ? 'الوحدة' : 'Unit'}
+                                                        </th>
+                                                        <th
+                                                            className="border-2 border-stone-300 p-1 text-center w-16 font-bold text-stone-700 text-[10px] cursor-pointer hover:bg-amber-100 transition-colors"
+                                                            onDoubleClick={() => handleColumnPaste('width', 'materials')}
+                                                            title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                        >
+                                                            {lang === 'ar' ? 'العرض' : 'Width'}
+                                                        </th>
+                                                        <th
+                                                            className="border-2 border-stone-300 p-1 text-center w-16 font-bold text-stone-700 text-[10px] cursor-pointer hover:bg-amber-100 transition-colors"
+                                                            onDoubleClick={() => handleColumnPaste('thickness', 'materials')}
+                                                            title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                        >
+                                                            T
+                                                        </th>
+                                                        <th
+                                                            className="border-2 border-stone-300 p-1 text-center w-16 font-bold text-stone-700 text-[10px] cursor-pointer hover:bg-amber-100 transition-colors"
+                                                            onDoubleClick={() => handleColumnPaste('length', 'materials')}
+                                                            title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                        >
+                                                            {lang === 'ar' ? 'الطول' : 'Length'}
+                                                        </th>
+                                                        <th className="border-2 border-stone-300 p-1 w-8"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-stone-100">
+                                                    {woForm.materials.map((mat, idx) => mat.category === 'wood' && (
+                                                        <tr key={mat.id} className="hover:bg-amber-50/50 transition-colors">
+                                                            <td className="border-r border-stone-200 p-1 text-center font-bold text-stone-500">{woForm.materials.filter(m => m.category === 'wood').indexOf(mat) + 1}</td>
+                                                            <td className="border-r border-stone-200 p-1">
+                                                                <input type="text" value={mat.productName} onChange={e => updateMaterial(idx, 'productName', e.target.value)}
+                                                                    className="w-full border border-stone-200 rounded px-1 min-h-[32px] text-[11px] focus:border-amber-400 focus:ring-1 focus:ring-amber-100 transition-all font-medium"
+                                                                    placeholder={lang === 'ar' ? 'اسم المادة' : 'Material Name'} />
+                                                            </td>
+                                                            <td className="border-r border-stone-200 p-1">
+                                                                <input type="number" value={mat.quantity} onChange={e => updateMaterial(idx, 'quantity', Number(e.target.value))}
+                                                                    className="w-full border border-stone-200 rounded px-1 min-h-[32px] text-[11px] text-center focus:border-amber-400 focus:ring-1 focus:ring-amber-100 transition-all font-bold" min="0.1" step="0.1" />
+                                                            </td>
+                                                            <td className="border-r border-stone-200 p-1">
+                                                                <AutoCompleteInput
+                                                                    value={mat.unit}
+                                                                    onChange={(value) => updateMaterial(idx, 'unit', value)}
+                                                                    suggestions={autoCompleteService.getSuggestions('units', mat.unit)}
+                                                                    placeholder={lang === 'ar' ? 'الوحدة' : 'Unit'}
+                                                                    className="w-full border border-stone-200 rounded px-1 min-h-[32px] text-[11px] text-center focus:border-amber-400 focus:ring-1 focus:ring-amber-100 transition-all font-medium"
+                                                                />
+                                                            </td>
+                                                            <td className="border-r border-stone-200 p-1">
+                                                                <input type="number" value={mat.size?.width || ''} onChange={e => updateMaterial(idx, 'size', { ...mat.size, width: Number(e.target.value) })}
+                                                                    className="w-full border border-stone-200 rounded px-1 min-h-[32px] text-[11px] text-center focus:border-amber-400 focus:ring-1 focus:ring-amber-100 transition-all font-bold"
+                                                                    placeholder="W" />
+                                                            </td>
+                                                            <td className="border-r border-stone-200 p-1">
+                                                                <input type="number" value={mat.size?.thickness || ''} onChange={e => updateMaterial(idx, 'size', { ...mat.size, thickness: Number(e.target.value) })}
+                                                                    className="w-full border border-stone-200 rounded px-1 min-h-[32px] text-[11px] text-center focus:border-amber-400 focus:ring-1 focus:ring-amber-100 transition-all font-bold"
+                                                                    placeholder="T" />
+                                                            </td>
+                                                            <td className="border-r border-stone-200 p-1">
+                                                                <input type="number" value={mat.size?.length || ''} onChange={e => updateMaterial(idx, 'size', { ...mat.size, length: Number(e.target.value) })}
+                                                                    className="w-full border border-stone-200 rounded px-1 min-h-[32px] text-[11px] text-center focus:border-amber-400 focus:ring-1 focus:ring-amber-100 transition-all font-bold"
+                                                                    placeholder="L" />
+                                                            </td>
+                                                            <td className="p-1 text-center">
+                                                                <button onClick={() => removeMaterial(idx)} className="text-red-600 hover:text-red-800 hover:bg-red-50 p-1 rounded transition-colors" title={lang === 'ar' ? 'حذف' : 'Delete'}>
+                                                                    <Trash2 size={14} />
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        ) : (
+                                            <p className="text-center text-slate-400 text-sm py-4 font-medium">{lang === 'ar' ? 'لا توجد مواد خشبية' : 'No wood materials'}</p>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {/* Hardware/Accessories Table */}
+                                <div className="border-2 border-[#D4DFFC] rounded-lg overflow-hidden shadow-sm">
+                                    <div className="px-5 py-3 flex justify-between items-center border-b-2 border-[#D4DFFC]" style={{ background: 'linear-gradient(to right, #E5EAFE, #EEF2FF)' }}>
+                                        <h4 className="font-bold text-base text-slate-700">{lang === 'ar' ? 'الهاردوير والإكسسوارات (Hardware & Accessories)' : 'Hardware & Accessories'}</h4>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick={handlePasteAccessories}
+                                                className="bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-green-700 flex items-center gap-2 transition-colors shadow-sm"
+                                                title={lang === 'ar' ? 'لصق من Excel' : 'Paste from Excel'}
+                                            >
+                                                📋 {lang === 'ar' ? 'لصق Excel' : 'Paste Excel'}
+                                            </button>
+                                            <button onClick={() => { const newMat: MaterialRequest = { id: `mat-${Date.now()}`, productName: '', quantity: 1, unit: 'قطعة', category: 'accessories', isManual: true }; setWoForm({ ...woForm, materials: [...woForm.materials, newMat] }); }} className="bg-indigo-500 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-indigo-600 flex items-center gap-2 transition-colors shadow-sm">
+                                                <Plus size={16} /> {lang === 'ar' ? 'إضافة' : 'Add'}
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="p-4">
+                                        {woForm.materials.filter(m => m.category === 'accessories').length > 0 ? (
+                                            <table className="w-full text-xs border-collapse">
+                                                <thead style={{ backgroundColor: '#E5EAFE' }}>
+                                                    <tr>
+                                                        <th className="border-2 border-[#D4DFFC] p-1 text-center min-w-[32px] font-bold text-slate-700 text-[10px]">NO.</th>
+                                                        <th
+                                                            className="border-2 border-[#D4DFFC] p-1 text-right font-bold text-slate-700 text-[10px] cursor-pointer hover:bg-indigo-100 transition-colors"
+                                                            onDoubleClick={() => handleColumnPaste('productName', 'materials')}
+                                                            title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                        >
+                                                            {lang === 'ar' ? 'اسم المادة' : 'Material Name'}
+                                                        </th>
+                                                        <th
+                                                            className="border-2 border-[#D4DFFC] p-1 text-center min-w-[40px] font-bold text-slate-700 text-[10px] cursor-pointer hover:bg-indigo-100 transition-colors"
+                                                            onDoubleClick={() => handleColumnPaste('quantity', 'materials')}
+                                                            title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                        >
+                                                            {lang === 'ar' ? 'الكمية' : 'QTY'}
+                                                        </th>
+                                                        <th
+                                                            className="border-2 border-[#D4DFFC] p-1 text-center w-16 font-bold text-slate-700 text-[10px] cursor-pointer hover:bg-indigo-100 transition-colors"
+                                                            onDoubleClick={() => handleColumnPaste('unit', 'materials')}
+                                                            title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                        >
+                                                            {lang === 'ar' ? 'الوحدة' : 'Unit'}
+                                                        </th>
+                                                        <th
+                                                            className="border-2 border-[#D4DFFC] p-1 font-bold text-slate-700 text-[10px] cursor-pointer hover:bg-indigo-100 transition-colors"
+                                                            onDoubleClick={() => handleColumnPaste('notes', 'materials')}
+                                                            title={lang === 'ar' ? 'اضغط مرتين للصق القيم' : 'Double-click to paste values'}
+                                                        >
+                                                            {lang === 'ar' ? 'ملاحظات' : 'Notes'}
+                                                        </th>
+                                                        <th className="border-2 border-[#D4DFFC] p-1 w-8"></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-indigo-50">
+                                                    {woForm.materials.map((mat, idx) => mat.category === 'accessories' && (
+                                                        <tr key={mat.id} className="hover:bg-indigo-50/50 transition-colors">
+                                                            <td className="border-r border-[#D4DFFC] p-1 text-center font-bold text-slate-500">{woForm.materials.filter(m => m.category === 'accessories').indexOf(mat) + 1}</td>
+                                                            <td className="border-r border-[#D4DFFC] p-1">
+                                                                <input type="text" value={mat.productName} onChange={e => updateMaterial(idx, 'productName', e.target.value)}
+                                                                    className="w-full border border-[#D4DFFC] rounded px-1 min-h-[32px] text-[11px] focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 transition-all font-medium"
+                                                                    placeholder={lang === 'ar' ? 'اسم المادة' : 'Material Name'} />
+                                                            </td>
+                                                            <td className="border-r border-[#D4DFFC] p-1">
+                                                                <input type="number" value={mat.quantity} onChange={e => updateMaterial(idx, 'quantity', Number(e.target.value))}
+                                                                    className="w-full border border-[#D4DFFC] rounded px-1 min-h-[32px] text-[11px] text-center focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 transition-all font-bold" min="0.1" step="0.1" />
+                                                            </td>
+                                                            <td className="border-r border-[#D4DFFC] p-1">
+                                                                <AutoCompleteInput
+                                                                    value={mat.unit}
+                                                                    onChange={(value) => updateMaterial(idx, 'unit', value)}
+                                                                    suggestions={autoCompleteService.getSuggestions('units', mat.unit)}
+                                                                    placeholder={lang === 'ar' ? 'الوحدة' : 'Unit'}
+                                                                    className="w-full border border-[#D4DFFC] rounded px-1 min-h-[32px] text-[11px] text-center focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 transition-all font-medium"
+                                                                />
+                                                            </td>
+                                                            <td className="border-r border-[#D4DFFC] p-1">
+                                                                <input type="text" value={mat.notes || ''} onChange={e => updateMaterial(idx, 'notes', e.target.value)}
+                                                                    className="w-full border border-[#D4DFFC] rounded px-1 min-h-[32px] text-[11px] focus:border-indigo-400 focus:ring-1 focus:ring-indigo-100 transition-all"
+                                                                    placeholder={lang === 'ar' ? 'ملاحظات' : 'Notes'} />
+                                                            </td>
+                                                            <td className="p-1 text-center">
+                                                                <button onClick={() => removeMaterial(idx)} className="text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-colors opacity-60 hover:opacity-100">
+                                                                    <Trash2 size={16} />
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        ) : (
+                                            <p className="text-center text-slate-400 text-sm py-4 font-medium">{lang === 'ar' ? 'لا توجد مواد هاردوير' : 'No hardware materials'}</p>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div className="p-4 border-t flex justify-end gap-2 bg-slate-50">
+                            <button onClick={() => setShowWOModal(false)} className="px-4 py-2 border rounded-lg hover:bg-slate-100">{lang === 'ar' ? 'إلغاء' : 'Cancel'}</button>
+                            <button onClick={handleSaveWO} className="px-6 py-2 bg-slate-800 text-white rounded-lg hover:bg-slate-700">{lang === 'ar' ? 'حفظ أمر العمل' : 'Save Work Order'}</button>
+                        </div>
+                    </div>
+                </div>
+            )
+            }
+
+            {/* Print Preview Modal */}
+            {
+                showPrintPreview && selectedOrder && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+                        <div className="bg-white rounded-xl w-full max-w-4xl max-h-[95vh] overflow-hidden flex flex-col">
+                            <div className="p-4 border-b flex justify-between items-center bg-slate-50">
+                                <h3 className="font-bold">{lang === 'ar' ? 'معاينة الطباعة' : 'Print Preview'}</h3>
+                                <div className="flex gap-2">
+                                    <button onClick={handlePrint} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
+                                        <Printer size={18} /> {lang === 'ar' ? 'طباعة' : 'Print'}
+                                    </button>
+                                    <button onClick={() => setShowPrintPreview(false)} className="p-2 hover:bg-slate-200 rounded"><X size={20} /></button>
+                                </div>
+                            </div>
+                            <div className="flex-1 overflow-auto p-4 bg-slate-100">
+                                <div ref={printRef} className="bg-white mx-auto" style={{ width: '210mm', fontFamily: 'Arial, sans-serif', fontSize: '8pt', padding: '8mm', color: '#000' }}>
+                                    {/* Company Header with Logo - EXACT COPY FROM handlePrint */}
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '5px', paddingBottom: '3px' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            <img src="/LOGO11.png" style={{ height: '50px', width: '50px' }} alt="Logo" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                                            <div style={{ fontSize: '7pt', lineHeight: '1.3' }}>
+                                                <strong style={{ fontSize: '8pt', display: 'block' }}>FOREST EDGE FACTORY</strong>
+                                                Saudi Arabia - Riyadh<br />
+                                                C.R: 7050835193<br />
+                                                Vat No.: 313142044200003
+                                            </div>
+                                        </div>
+
+                                        <div style={{ textAlign: 'center', fontSize: '14pt', fontWeight: 'bold', flex: 1, paddingTop: '15px' }}>{selectedOrder.orderNumber}</div>
+
+                                        <div style={{ textAlign: 'right', fontSize: '6.5pt', lineHeight: '1.3', direction: 'rtl' }}>
+                                            المملكة العربية السعودية – الرياض<br />
+                                            منطقة الخرج الصناعية بالرياض<br />
+                                            حي المعذر الشمالي لالامير تركي بن عبد العزيز<br />
+                                            س ت: 7050835193<br />
+                                            رقم ضريبي: 313142044200003
+                                        </div>
+                                    </div>
+
+                                    {/* Header Table - EXACT COPY */}
+                                    <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '2px' }}>
+                                        <thead>
+                                            <tr>
+                                                <th style={{ width: '14%', border: '1px solid #000', padding: '3px', backgroundColor: '#d9d9d9', fontWeight: 'bold', fontSize: '7pt' }}>Job Order Date</th>
+                                                <th style={{ width: '14%', border: '1px solid #000', padding: '3px', backgroundColor: '#d9d9d9', fontWeight: 'bold', fontSize: '7pt' }}>Job Order No.</th>
+                                                <th style={{ width: '28%', border: '1px solid #000', padding: '3px', backgroundColor: '#d9d9d9', fontWeight: 'bold', fontSize: '7pt' }}>CLIENT</th>
+                                                <th style={{ width: '14%', border: '1px solid #000', padding: '3px', backgroundColor: '#d9d9d9', fontWeight: 'bold', fontSize: '7pt' }}>Start Date</th>
+                                                <th style={{ width: '20%', border: '1px solid #000', padding: '3px', backgroundColor: '#d9d9d9', fontWeight: 'bold', fontSize: '7pt' }}>End Date</th>
+                                                <th style={{ width: '10%', border: '1px solid #000', padding: '3px', backgroundColor: '#d9d9d9', fontWeight: 'bold', fontSize: '7pt' }}>Priority</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style={{ border: '1px solid #000', padding: '3px', textAlign: 'center', fontSize: '7.5pt', fontWeight: 'bold', height: '18px' }}>{new Date(selectedOrder.jobOrderDate).toLocaleDateString('en-GB')}</td>
+                                                <td style={{ border: '1px solid #000', padding: '3px', textAlign: 'center', fontSize: '7.5pt', fontWeight: 'bold' }}>{selectedOrder.jobOrderNumber}</td>
+                                                <td style={{ border: '1px solid #000', padding: '3px', textAlign: 'center', fontSize: '7.5pt', fontWeight: 'bold' }}>{selectedOrder.customerName}</td>
+                                                <td style={{ border: '1px solid #000', padding: '3px', textAlign: 'center', fontSize: '7.5pt', fontWeight: 'bold' }}>{selectedOrder.startDate ? new Date(selectedOrder.startDate).toLocaleDateString('en-GB') : '################'}</td>
+                                                <td style={{ border: '1px solid #000', padding: '3px', textAlign: 'center', fontSize: '7.5pt', fontWeight: 'bold' }}>{selectedOrder.endDate ? new Date(selectedOrder.endDate).toLocaleDateString('en-GB') : '################'}</td>
+                                                <td style={{
+                                                    border: '1px solid #000', padding: '3px', textAlign: 'center', fontSize: '7.5pt', fontWeight: 'bold', backgroundColor: (() => {
+                                                        if (selectedOrder.priority === 'urgent') return '#ff9999'; // Stronger Red
+                                                        if (selectedOrder.priority === 'very_high') return '#ffcc80'; // Stronger Orange
+                                                        if (selectedOrder.priority === 'high') return '#ffeb99'; // Stronger Yellow
+                                                        return '#fff'; // White for Normal
+                                                    })()
+                                                }}>
+                                                    {selectedOrder.priority === 'very_high' ? 'Very High' : selectedOrder.priority === 'high' ? 'High' : selectedOrder.priority === 'urgent' ? 'Urgent' : 'Normal'}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                    {/* Items Table - EXACT COPY */}
+                                    <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '2px' }}>
+                                        <thead>
+                                            <tr>
+                                                <th rowSpan={2} style={{ width: '3%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', height: '18px', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>NO.</th>
+                                                <th rowSpan={2} style={{ width: '22%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>ITEM</th>
+                                                <th rowSpan={2} style={{ width: '4%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>Q.T.Y</th>
+                                                <th colSpan={3} style={{ width: '12%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>FINAL DIM. (mm)</th>
+                                                <th rowSpan={2} style={{ width: '10%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>MODEL CODE</th>
+                                                <th colSpan={2} style={{ width: '16%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>PAINT</th>
+                                                <th rowSpan={2} style={{ width: '6%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>GLOSSY %</th>
+                                                <th rowSpan={2} style={{ width: '5%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>VENEER</th>
+                                                <th rowSpan={2} style={{ width: '15%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>NOTE</th>
+                                            </tr>
+                                            <tr>
+                                                <th style={{ width: '4%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>H</th>
+                                                <th style={{ width: '4%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>L</th>
+                                                <th style={{ width: '4%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>W</th>
+                                                <th style={{ width: '8%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>COLOR</th>
+                                                <th style={{ width: '8%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', whiteSpace: 'nowrap', textAlign: 'center', verticalAlign: 'middle' }}>CODE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {Array.from({ length: 12 }).map((_, index) => {
+                                                const item = selectedOrder.items?.[index];
+                                                return (
+                                                    <tr key={index}>
+                                                        <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', height: '18px', whiteSpace: 'nowrap', overflow: 'hidden', verticalAlign: 'middle' }}>{index + 1}</td>
+                                                        <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'left', paddingLeft: '3px', fontSize: '7.5pt', whiteSpace: 'nowrap', overflow: 'hidden', verticalAlign: 'middle' }}>{item?.itemName || ''}</td>
+                                                        <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{item?.quantity || ''}</td>
+                                                        <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{item?.dimensions?.height || ''}</td>
+                                                        <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{item?.dimensions?.length || ''}</td>
+                                                        <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{item?.dimensions?.width || ''}</td>
+                                                        <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{item?.modelCode || ''}</td>
+                                                        <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{item?.paintColor || ''}</td>
+                                                        <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '6.5pt', verticalAlign: 'middle' }}>{item?.paintCode || ''}</td>
+                                                        <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{item ? `${item.glossPercentage}%` : ''}</td>
+                                                        <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{item?.veneer || ''}</td>
+                                                        <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'left', paddingLeft: '3px', fontSize: '6.5pt', whiteSpace: 'nowrap', overflow: 'hidden', verticalAlign: 'middle' }}>{item?.notes || ''}</td>
+                                                    </tr>
+                                                );
+                                            })}
+                                        </tbody>
+                                    </table>
+
+                                    {/* Material Request Section - EXACT COPY */}
+                                    {selectedOrder.materials && selectedOrder.materials.length > 0 && (
+                                        <div style={{ marginTop: '4px' }}>
+                                            <div style={{ backgroundColor: '#d9d9d9', border: '1px solid #000', textAlign: 'center', padding: '3px', fontWeight: 'bold', fontSize: '8pt' }}>
+                                                MATERIAL REQUEST
+                                            </div>
+
+                                            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 0 }}>
+                                                <thead>
+                                                    <tr>
+                                                        <td rowSpan={100} style={{ width: '3%', backgroundColor: '#d9d9d9', padding: 0, borderRight: '2px solid #000', border: '1px solid #000', verticalAlign: 'middle' }}>
+                                                            <div style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', fontWeight: 'bold', fontSize: '8pt', padding: '12px 2px' }}>WOOD</div>
+                                                        </td>
+                                                        <th style={{ width: '20%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', textAlign: 'center', verticalAlign: 'middle' }}>MATERIAL NAME</th>
+                                                        <th style={{ width: '5%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', textAlign: 'center', verticalAlign: 'middle' }}>QTY</th>
+                                                        <th style={{ width: '6%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', textAlign: 'center', verticalAlign: 'middle' }}>UNIT</th>
+                                                        <th style={{ width: '4%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', textAlign: 'center', verticalAlign: 'middle' }}>W</th>
+                                                        <th style={{ width: '4%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', textAlign: 'center', verticalAlign: 'middle' }}>L</th>
+
+                                                        <td rowSpan={100} style={{ width: '3%', backgroundColor: '#d9d9d9', padding: 0, borderLeft: '2px solid #000', borderRight: '2px solid #000', border: '1px solid #000', verticalAlign: 'middle' }}>
+                                                            <div style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', fontWeight: 'bold', fontSize: '8pt', padding: '12px 2px' }}>ACCESSORIES</div>
+                                                        </td>
+                                                        <th style={{ width: '20%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', textAlign: 'center', verticalAlign: 'middle' }}>MATERIAL NAME</th>
+                                                        <th style={{ width: '5%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', textAlign: 'center', verticalAlign: 'middle' }}>QTY</th>
+                                                        <th style={{ width: '30%', border: '1px solid #000', padding: '1px 2px', backgroundColor: '#d9d9d9', fontSize: '7pt', textAlign: 'center', verticalAlign: 'middle' }}>NOTES</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {(() => {
+                                                        const woodMaterials = selectedOrder.materials?.filter(m => m.category === 'wood' || m.category === 'other') || [];
+                                                        const accessoriesMaterials = selectedOrder.materials?.filter(m => m.category === 'accessories') || [];
+                                                        const maxRows = 30;
+
+                                                        return Array.from({ length: maxRows }).map((_, i) => {
+                                                            const wood = woodMaterials[i];
+                                                            const acc = accessoriesMaterials[i];
+                                                            return (
+                                                                <tr key={i}>
+                                                                    <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'left', paddingLeft: '3px', fontSize: '7pt', height: '18px', whiteSpace: 'nowrap', overflow: 'hidden', verticalAlign: 'middle' }}>{wood?.productName || ''}</td>
+                                                                    <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{wood?.quantity || ''}</td>
+                                                                    <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{wood?.unit || ''}</td>
+                                                                    <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{wood?.size?.width || ''}</td>
+                                                                    <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{wood?.size?.length || ''}</td>
+
+                                                                    <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'left', paddingLeft: '3px', fontSize: '7pt', whiteSpace: 'nowrap', overflow: 'hidden', verticalAlign: 'middle' }}>{acc?.productName || ''}</td>
+                                                                    <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'center', fontSize: '7.5pt', verticalAlign: 'middle' }}>{acc?.quantity || ''}</td>
+                                                                    <td style={{ border: '1px solid #000', padding: '1px 2px', textAlign: 'left', paddingLeft: '3px', fontSize: '6.5pt', whiteSpace: 'nowrap', overflow: 'hidden', verticalAlign: 'middle' }}>{acc?.notes || ''}</td>
+                                                                </tr>
+                                                            );
+                                                        });
+                                                    })()}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    )}
+
+                                    {/* Footer - EXACT COPY */}
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '15px', fontSize: '7.5pt' }}>
+                                        <div style={{ textAlign: 'center' }}>
+                                            <div>Prepared By: ___________________</div>
+                                            <div style={{ marginTop: '15px', fontWeight: 'bold' }}>Engneering Dept.</div>
+                                        </div>
+                                        <div style={{ textAlign: 'center' }}>
+                                            <div>Engr: Sabry Mahfouz</div>
+                                            <div style={{ marginTop: '15px', fontWeight: 'bold' }}>Operation Manager</div>
+                                        </div>
+                                        <div style={{ textAlign: 'center' }}>
+                                            <div>Recived By: ___________________</div>
+                                            <div style={{ marginTop: '15px', fontWeight: 'bold' }}>Production Dept.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+            {/* Summary Print Modal */}
+            {
+                showSummaryPrint && (
+                    <WorkOrdersSummaryPrint
+                        workOrders={workOrders}
+                        lang={lang}
+                        onClose={() => setShowSummaryPrint(false)}
+                    />
+                )
+            }
+        </div >
+    );
+};
+
+export default ManufacturingPage;

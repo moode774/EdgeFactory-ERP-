@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forest Edge - نظام تقارير الوجبات الرسمي</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .elegant-title {
+      font-family: 'Amiri', serif;
+      background: linear-gradient(135deg, #2d5016 0%, #4a7c2c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 0.5cm;
+      }
+      
+      body {
+        background: white !important;
+      }
+      
+      .no-print {
+        display: none !important;
+      }
+      
+      .print-area {
+        box-shadow: none !important;
+        border: none !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        page-break-after: avoid;
+      }
+      
+      .page-break {
+        page-break-before: always;
+      }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "react/": "https://esm.sh/react@^19.2.3/",
+      "react": "https://esm.sh/react@^19.2.3",
+      "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+      "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="./main.tsx"></script>
+</body>
+</html>

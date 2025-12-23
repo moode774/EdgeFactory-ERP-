@@ -1,0 +1,80 @@
+{
+  "name": "forest-edge-factory",
+  "version": "1.0.0",
+  "description": "نظام إدارة المخزون - Forest Edge Factory",
+  "main": "electron/main.js",
+  "author": "Forest Edge Factory",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "deploy": "npm run build && firebase deploy --only hosting",
+    "electron:dev": "vite build && electron .",
+    "electron:build": "vite build && electron-builder",
+    "package": "vite build && set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --win portable",
+    "installer": "vite build && set CSC_IDENTITY_AUTO_DISCOVERY=false && electron-builder --win nsis"
+  },
+  "dependencies": {
+    "firebase": "^12.6.0",
+    "lucide-react": "^0.556.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "electron": "^28.0.0",
+    "electron-builder": "^26.0.12",
+    "electron-icon-builder": "^2.0.1",
+    "png-to-ico": "^3.0.1",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  },
+  "build": {
+    "appId": "com.forestedge.factory",
+    "productName": "Forest Edge Factory",
+    "copyright": "Copyright © 2024 Forest Edge Factory",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "icon.ico"
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "icon.ico",
+      "uninstallerIcon": "icon.ico",
+      "installerHeaderIcon": "icon.ico",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Forest Edge Factory"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable.${ext}"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "icon.ico",
+      "artifactName": "${productName}-${version}.${ext}",
+      "verifyUpdateCodeSignature": false
+    }
+  }
+}

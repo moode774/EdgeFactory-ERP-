@@ -1,0 +1,2972 @@
+﻿{
+    "25-07-00058": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0058",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "1/10/26"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "A111-06-00009-07-01-FOREST-EDGE",
+            "Job Order No.": "30",
+            "Sales person": "P04219"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "A111-06-00009-09-01-FOREST-EDGE",
+            "Job Order No.": "360",
+            "Sales person": "P04219"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "A111-06-00009-11-01-FOREST-EDGE",
+            "Job Order No.": "30",
+            "Sales person": "P04219"
+        },
+        {
+            "Job Order Date": "4"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00057": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0057",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "1/10/26"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "A111-06-00009-07-01\r\n",
+            "Job Order No.": "30",
+            "Sales person": "P04219"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "A111-06-00009-09-01\r\n",
+            "Job Order No.": "360",
+            "Sales person": "P04219"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "A111-06-00009-11-01\r\n",
+            "Job Order No.": "30",
+            "Sales person": "P04219"
+        },
+        {
+            "Job Order Date": "4"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00054 (R01)": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-0054 R01",
+            "Sales person": "Sales person",
+            "Start Date": "11/13/25",
+            "End Date": "12/13/25"
+        },
+        {
+            "undefined": "CLIENT :  ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "P04245"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "2",
+            "Sales person": "P04245"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "P04245"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "P04245"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "P04245"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00056": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-0056",
+            "Sales person": "Sales person",
+            "Start Date": "Sunday, November 16, 2025",
+            "End Date": "Sunday, November 30, 2025"
+        },
+        {
+            "undefined": "CLIENT :  ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "A111-06-00012-07-03-FOREST-EDGE",
+            "Job Order No.": "1",
+            "Sales person": "P04297"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "A111-06-00012-09-03-FOREST-EDGE",
+            "Job Order No.": "10",
+            "Sales person": "P04297"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "A111-06-00012-10-03-FOREST-EDGE",
+            "Job Order No.": "2",
+            "Sales person": "P04297"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "A111-06-00012-11-03-FOREST-EDGE",
+            "Job Order No.": "1",
+            "Sales person": "P04297"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "A111-06-00012-12-03-FOREST-EDGE",
+            "Job Order No.": "1",
+            "Sales person": "P04297"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00055": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-0055",
+            "Sales person": "Sales person",
+            "Start Date": "Sunday, November 16, 2025",
+            "End Date": "Wednesday, November 19, 2025"
+        },
+        {
+            "undefined": "CLIENT :  ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "-",
+            "Job Order No.": "1",
+            "Sales person": "S00074"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00054": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-0054 R01",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "1/19/26"
+        },
+        {
+            "undefined": "CLIENT :  ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "P04245"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "2",
+            "Sales person": "P04245"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "P04245"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "P04245"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "P04245"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00053": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0053",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "1/19/26"
+        },
+        {
+            "undefined": "CLIENT :  ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "-",
+            "Job Order No.": "2",
+            "Sales person": "-"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00052": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0052",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "1/19/26"
+        },
+        {
+            "undefined": "CLIENT : Mr.Soliman Al Gabreen"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "-",
+            "Job Order No.": "90 LM",
+            "Sales person": "-"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00051": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0051",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "1/13/26"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "A112-13-00005-01-01-FOREST-EDGE",
+            "Job Order No.": "2",
+            "Sales person": "P04257"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "A112-15-00017-01-01-FOREST-EDGE",
+            "Job Order No.": "2",
+            "Sales person": "P04257"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "A111-06-00013-07-01-FOREST-EDGE",
+            "Job Order No.": "1",
+            "Sales person": "P04257"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "A111-06-00014-07-01-FOREST-EDGE",
+            "Job Order No.": "1",
+            "Sales person": "P04257"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00050": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0050",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "2/18/26"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "SAME SAMPLE",
+            "Job Order No.": "2",
+            "Sales person": "S00063",
+            "End Date": "1 SIDE EXTENSION 1200W DELEVILY MONDAY "
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "SAME SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "S00063"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00049": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0049",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "2/18/26"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "SAME COLOR APPROVED",
+            "Job Order No.": "50",
+            "Sales person": "PO4217"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "SAME COLOR APPROVED",
+            "Job Order No.": "100",
+            "Sales person": "PO4217"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00048": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0048",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "2/18/26"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "SAME COLOR APPROVED",
+            "Job Order No.": "50",
+            "Sales person": "PO4222"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "SAME COLOR APPROVED",
+            "Job Order No.": "100",
+            "Sales person": "PO4222"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00047": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0047",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "12/27/25"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "SAME COLOR",
+            "Job Order No.": "1",
+            "Sales person": "S00059",
+            "End Date": "AS PER SAMPLE APPROVED"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00046": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0046",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "12/27/25"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "-",
+            "Job Order No.": "3",
+            "Sales person": "S00058",
+            "End Date": "AS PER SAMPLE APPROVED"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00045": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0045",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "1/10/26"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "4030/850/63",
+            "Job Order No.": "1",
+            "Sales person": "PO4152",
+            "End Date": "A part is added to a table that already exists with the client."
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Eng: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00044": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0044",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "1/10/26"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "A212-07-00116-01-01-9115",
+            "Job Order No.": "1",
+            "Sales person": "MAIL"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "A212-08-00297-01-01-HAOTIE",
+            "Job Order No.": "1",
+            "Sales person": "MAIL"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "A212-08-00297-01-01-HAOTIE",
+            "Job Order No.": "1",
+            "Sales person": "MAIL"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Engr: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00043": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0043",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "1/10/26"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "A111-10-00028-01-01-FOREST-EDGE",
+            "Job Order No.": "1",
+            "Sales person": "PO4126"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Engr: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00042": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0042",
+            "Sales person": "Sales person",
+            "Start Date": "12/20/25",
+            "End Date": "2/3/26"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "MATCHING WITH SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "P04051",
+            "End Date": "wood veneer and color matching with sample"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "MATCHING WITH SAMPLE",
+            "Job Order No.": "10",
+            "Sales person": "P04051"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Engr: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00041": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0041",
+            "Sales person": "Sales person",
+            "Start Date": "12/15/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "CLIENT : SAMPLE FACTORY"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "703-SA-VEN-PA",
+            "Job Order No.": "1",
+            "Sales person": "-"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "703-SA-VEN-PA",
+            "Job Order No.": "2",
+            "Sales person": "-"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Engr: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00040": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0040",
+            "Sales person": "Sales person",
+            "Start Date": "12/15/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "CLIENT : SAMPLE FACTORY"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "704-SA-VEN-PA",
+            "Job Order No.": "1",
+            "Sales person": "-"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "704-SA-VEN-PA",
+            "Job Order No.": "2",
+            "Sales person": "-"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Engr: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00039": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0039",
+            "Sales person": "Sales person",
+            "Start Date": "12/15/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "CLIENT : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "4030/816/63",
+            "Job Order No.": "5",
+            "Sales person": "P02781"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "4030/812/63",
+            "Job Order No.": "10",
+            "Sales person": "P02781"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "4030/881/63",
+            "Job Order No.": "170",
+            "Sales person": "P02781"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "4030/850/63",
+            "Job Order No.": "30",
+            "Sales person": "P02781"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "4030/850/63",
+            "Job Order No.": "15",
+            "Sales person": "P02781"
+        },
+        {
+            "Job Order Date": "6",
+            "undefined": "4030/MIR/63",
+            "Job Order No.": "15",
+            "Sales person": "P02781"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Engr: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00038": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0038",
+            "Sales person": "Sales person",
+            "Start Date": "12/15/25",
+            "End Date": "1/14/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "COLOR WOOD BROWN&TOP PU LEATHER ",
+            "Job Order No.": "1",
+            "Sales person": "P04004-(R113)"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "COLOR BRWON IN WOOD VENEER ",
+            "Job Order No.": "1",
+            "Sales person": "P04004-(R113)"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "COLOR TOP VENEER & PU LEATHER BEIGE ",
+            "Job Order No.": "1",
+            "Sales person": "P04004-(R113)"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "COLOR OLIVE BURL V30",
+            "Job Order No.": "1",
+            "Sales person": "P04004-(R113)"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "COLOR OLIVE BURL V31",
+            "Job Order No.": "1",
+            "Sales person": "P04004-(R113)"
+        },
+        {
+            "Job Order Date": "6",
+            "undefined": "SAME SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "P04004-(R113)"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Engr: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00037": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0037",
+            "Sales person": "Sales person",
+            "Start Date": "12/15/25",
+            "End Date": "12/29/25"
+        },
+        {
+            "undefined": "client : FACTORY (ALAJLAN)"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1",
+            "End Date": "color as per sample"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Engr: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00036": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0036",
+            "Sales person": "Sales person",
+            "Start Date": "12/15/25",
+            "End Date": "12/29/25"
+        },
+        {
+            "undefined": "client : FACTORY"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "2",
+            "End Date": "color as per sample"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Engr: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00035": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0035",
+            "Sales person": "Sales person",
+            "Start Date": "12/15/25",
+            "End Date": "12/29/25"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "4030",
+            "Job Order No.": "1",
+            "Sales person": "QUO-R111",
+            "End Date": "color as per sample"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "4030",
+            "Job Order No.": "1",
+            "Sales person": "QUO-R111"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "4030",
+            "Job Order No.": "1",
+            "Sales person": "QUO-R111"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Document Controller",
+            "Sales person": "Purchasing  Dept.",
+            "End Date": "Factory Manager"
+        },
+        {
+            "undefined": "Production Dept.",
+            "Job Order No.": "Nada Samir",
+            "Sales person": "Mr. Mohamed Mohsin ",
+            "End Date": "Engr: Sabry Mahfouz"
+        }
+    ],
+    "25-07-00034": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0034",
+            "Start Date": "12/15/25",
+            "End Date": "12/29/25"
+        },
+        {
+            "undefined": "client : FACTORY SAMPLE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "new color",
+            "Job Order No.": "1",
+            "Sales person": "sample",
+            "End Date": "color as per sample"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "new color",
+            "Job Order No.": "1",
+            "Sales person": "sample"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "new color",
+            "Job Order No.": "10",
+            "Sales person": "sample"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "new color",
+            "Job Order No.": "2",
+            "Sales person": "sample"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "new color",
+            "Job Order No.": "1",
+            "Sales person": "sample"
+        },
+        {
+            "Job Order Date": "6",
+            "undefined": "new color",
+            "Job Order No.": "1",
+            "Sales person": "sample"
+        },
+        {
+            "Job Order Date": "7",
+            "undefined": "new color",
+            "Job Order No.": "10",
+            "Sales person": "sample"
+        },
+        {
+            "Job Order Date": "8",
+            "undefined": "new color",
+            "Job Order No.": "2",
+            "Sales person": "sample"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00033": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0033",
+            "Start Date": "12/20/25",
+            "End Date": "1/3/26"
+        },
+        {
+            "undefined": "client : FACTORY SAMPLE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "AS PER DRAWING",
+            "Job Order No.": "1",
+            "Sales person": "SAMPLE"
+        },
+        {
+            "undefined": "  "
+        },
+        {
+            "undefined": "          "
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00032": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0032",
+            "Start Date": "12/20/25",
+            "End Date": "1/10/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE  "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "3530/880/07",
+            "Job Order No.": "18",
+            "Sales person": "#P03949",
+            "End Date": "AS PER STOCK"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "3530/880/07",
+            "Job Order No.": "6",
+            "Sales person": "#P03949"
+        },
+        {
+            "undefined": "  "
+        },
+        {
+            "undefined": "          "
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00031": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0031",
+            "Start Date": "12/20/25",
+            "End Date": "2/28/26"
+        },
+        {
+            "undefined": "client : FACTORY SAMPLE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "707-SA-VEN-PA-MET",
+            "Job Order No.": "1",
+            "Sales person": "FOR SAMPLE",
+            "End Date": "  "
+        },
+        {
+            "undefined": "  "
+        },
+        {
+            "undefined": "          "
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00030": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0030",
+            "Start Date": "12/20/25",
+            "End Date": "2/28/26"
+        },
+        {
+            "undefined": "client : FACTORY SAMPLE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "706-SA-VEN-PA-M+S",
+            "Job Order No.": "1",
+            "Sales person": "FOR SAMPLE",
+            "End Date": "  "
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "706-SA-VEN-PA-M+S",
+            "Job Order No.": "2",
+            "Sales person": "FOR SAMPLE"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00029": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0029",
+            "Start Date": "12/20/25",
+            "End Date": "2/28/26"
+        },
+        {
+            "undefined": "client : FACTORY SAMPLE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "702-SA-PV-PA",
+            "Job Order No.": "1",
+            "Sales person": "FOR SAMPLE",
+            "End Date": "  "
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "702-SA-PV-PA",
+            "Job Order No.": "2",
+            "Sales person": "FOR SAMPLE"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00028": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0028",
+            "Start Date": "12/20/25",
+            "End Date": "2/28/26"
+        },
+        {
+            "undefined": "client : FACTORY SAMPLE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "705-SA-GL-PA",
+            "Job Order No.": "1",
+            "Sales person": "FOR SAMPLE",
+            "End Date": "  "
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "705-SA-GL-PA",
+            "Job Order No.": "2",
+            "Sales person": "FOR SAMPLE"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00027": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0027",
+            "Start Date": "12/20/25",
+            "End Date": "2/28/26"
+        },
+        {
+            "undefined": "client : Mr. ABDULHAMEED ALGHALIGA"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "MAIL",
+            "End Date": "AS PER STOCK"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "MAIL"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1",
+            "Sales person": "MAIL"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "16",
+            "Sales person": "MAIL"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00026": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0026",
+            "Start Date": "12/20/25",
+            "End Date": "2/28/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "ROYAL/850/06",
+            "Job Order No.": "1",
+            "Sales person": "P01447",
+            "End Date": "AS PER STOCK"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00025": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0025",
+            "Start Date": "12/20/25",
+            "End Date": "2/28/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "3530/874/07",
+            "Job Order No.": "100",
+            "Sales person": "P03101",
+            "End Date": "AS PER STOCK"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "3530/850/07",
+            "Job Order No.": "200",
+            "Sales person": "P03101"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00024": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0024",
+            "Start Date": "12/20/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "3530/874/07",
+            "Job Order No.": "5",
+            "Sales person": "P03708",
+            "End Date": "AS PER STOCK"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "3530/850/07",
+            "Job Order No.": "5",
+            "Sales person": "P03708"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "3530/MIR/07",
+            "Job Order No.": "5",
+            "Sales person": "P03708"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "3530/874/07",
+            "Job Order No.": "5",
+            "Sales person": "P03708"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "3530/850/07",
+            "Job Order No.": "5",
+            "Sales person": "P03708"
+        },
+        {
+            "Job Order Date": "6",
+            "undefined": "3530/MIR/07",
+            "Job Order No.": "5",
+            "Sales person": "P03708"
+        },
+        {
+            "Job Order Date": "7",
+            "undefined": "3530/880/07",
+            "Job Order No.": "120",
+            "Sales person": "P03708"
+        },
+        {
+            "Job Order Date": "8",
+            "undefined": "3530/881/07",
+            "Job Order No.": "20",
+            "Sales person": "P03708"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00023": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0023",
+            "Start Date": "12/20/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "3530/874/07",
+            "Job Order No.": "5",
+            "Sales person": "P03709",
+            "End Date": "AS PER STOCK"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "3530/850/07",
+            "Job Order No.": "5",
+            "Sales person": "P03709"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "3530/MIR/07",
+            "Job Order No.": "5",
+            "Sales person": "P03709"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "3530/874/07",
+            "Job Order No.": "5",
+            "Sales person": "P03709"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "3530/850/07",
+            "Job Order No.": "5",
+            "Sales person": "P03709"
+        },
+        {
+            "Job Order Date": "6",
+            "undefined": "3530/MIR/07",
+            "Job Order No.": "5",
+            "Sales person": "P03709"
+        },
+        {
+            "Job Order Date": "7",
+            "undefined": "3530/880/07",
+            "Job Order No.": "120",
+            "Sales person": "P03709"
+        },
+        {
+            "Job Order Date": "8",
+            "undefined": "3530/881/07",
+            "Job Order No.": "20",
+            "Sales person": "P03709"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00022": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0022",
+            "Start Date": "12/20/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "client : SKH/ ABDULATIF"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "as per sample",
+            "Job Order No.": "1",
+            "Sales person": "-",
+            "End Date": "AS PER SHOP DRAWING"
+        },
+        {
+            "undefined": "  "
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00021": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0021",
+            "Start Date": "12/20/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "as per sample",
+            "Job Order No.": "2",
+            "Sales person": "R104 - Rev1"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "as per sample",
+            "Job Order No.": "2",
+            "Sales person": "R104 - Rev1"
+        },
+        {
+            "undefined": "  "
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00020": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0020",
+            "Start Date": "12/20/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "client : SKH/ ABDUL HAMEED "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "AS PER SAMPLE ",
+            "Job Order No.": "1",
+            "Sales person": "MAIL -",
+            "End Date": "AS PER SAMPLE "
+        },
+        {
+            "undefined": "  "
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00019": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0019",
+            "Start Date": "12/20/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "V30+L25-BGREEN S. 0826",
+            "Job Order No.": "1",
+            "Sales person": "INT/00771/116",
+            "End Date": "AS PER SAMPLE "
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "V30-GREEN S. 0826",
+            "Job Order No.": "1",
+            "Sales person": "INT/00771/116"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "V30-OLIVE",
+            "Job Order No.": "1",
+            "Sales person": "INT/00771/116"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "V30+L44-GREEN",
+            "Job Order No.": "1",
+            "Sales person": "INT/00771/116"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "V30- OLIVE BURL",
+            "Job Order No.": "1",
+            "Sales person": "INT/00771/116"
+        },
+        {
+            "undefined": "  "
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00018": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0018 R01",
+            "Start Date": "12/20/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "V30-OLIVE-BURL-089/2024",
+            "Job Order No.": "1",
+            "Sales person": "INT/00765/116",
+            "End Date": "AS PER SAMPLE "
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "V30-OLIVE-BURL-089/2024",
+            "Job Order No.": "1",
+            "Sales person": "INT/00765/116"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "V30-OLIVE-BURL-089/2024",
+            "Job Order No.": "1",
+            "Sales person": "INT/00765/116"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "V30-OLIVE-BURL-089/2024",
+            "Job Order No.": "1",
+            "Sales person": "INT/00765/116"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "V30-OLIVE-BURL-089/2024",
+            "Job Order No.": "1",
+            "Sales person": "INT/00765/116"
+        },
+        {
+            "undefined": "  "
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00017": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0017",
+            "Start Date": "12/20/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "CT18/944/061B",
+            "Job Order No.": "7",
+            "Sales person": "PO3720"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "CT18/942/061B",
+            "Job Order No.": "14",
+            "Sales person": "PO3720"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00016": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0016",
+            "Start Date": "12/20/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "ROYAL/816/07",
+            "Job Order No.": "5",
+            "Sales person": "PO3739"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "ROYAL/850/07",
+            "Job Order No.": "5",
+            "Sales person": "PO3739"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "ROYAL/MIR/07",
+            "Job Order No.": "5",
+            "Sales person": "PO3739"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "ROYAL/880/07",
+            "Job Order No.": "50",
+            "Sales person": "PO3739"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "ROYAL/881/07",
+            "Job Order No.": "10",
+            "Sales person": "PO3739"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00015": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0015",
+            "Start Date": "12/20/25",
+            "End Date": "1/29/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "Sales person": "Reference No.",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "ROYAL/816/07",
+            "Job Order No.": "10",
+            "Sales person": "PO3740"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "ROYAL/850/07",
+            "Job Order No.": "10",
+            "Sales person": "PO3740"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "ROYAL/MIR/07",
+            "Job Order No.": "10",
+            "Sales person": "PO3740"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "ROYAL/880/07",
+            "Job Order No.": "140",
+            "Sales person": "PO3740"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "ROYAL/881/07",
+            "Job Order No.": "20",
+            "Sales person": "PO3740"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00014": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0014",
+            "Start Date": "12/20/25",
+            "End Date": "1/3/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "AS PER SAMPLE ",
+            "Job Order No.": "1",
+            "End Date": "REPINTED AND NEW GLASS"
+        },
+        {
+            "Job Order Date": "MATERIAL REQUEST"
+        },
+        {
+            "Job Order Date": "WOOD",
+            "undefined": "NOTES",
+            "End Date": "QTY"
+        },
+        {
+            "undefined": "L",
+            "Sales person": "T"
+        },
+        {
+            "undefined": "3320",
+            "Sales person": "8"
+        },
+        {
+            "undefined": "-"
+        },
+        {
+            "undefined": "   "
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00013": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0013",
+            "Start Date": "12/20/25",
+            "End Date": "1/3/26"
+        },
+        {
+            "undefined": "client : ALABDULLATIF FURNITURE"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "NO",
+            "Job Order No.": "16"
+        },
+        {
+            "Job Order Date": "MATERIAL REQUEST"
+        },
+        {
+            "Job Order Date": "WOOD",
+            "undefined": "NOTES",
+            "End Date": "QTY"
+        },
+        {
+            "undefined": "L",
+            "Sales person": "T"
+        },
+        {
+            "undefined": "2440",
+            "Sales person": "17"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00012": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0012",
+            "Start Date": "12/20/25",
+            "End Date": "1/3/26"
+        },
+        {
+            "undefined": "client : MR. SOLIMAN JUBRIAN"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "WHITE",
+            "Job Order No.": "1"
+        },
+        {
+            "Job Order Date": "MATERIAL REQUEST"
+        },
+        {
+            "Job Order Date": "WOOD",
+            "undefined": "NOTES",
+            "End Date": "QTY"
+        },
+        {
+            "undefined": "L",
+            "Sales person": "T"
+        },
+        {
+            "undefined": "2440",
+            "Sales person": "18"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00011": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0011",
+            "Start Date": "12/20/25",
+            "End Date": "1/3/26"
+        },
+        {
+            "undefined": "client : MADINA BRANCH"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "D/BROWN COLOR - V",
+            "Job Order No.": "2"
+        },
+        {
+            "Job Order Date": "MATERIAL REQUEST"
+        },
+        {
+            "Job Order Date": "WOOD",
+            "undefined": "NOTES",
+            "End Date": "QTY"
+        },
+        {
+            "undefined": "L",
+            "Sales person": "T"
+        },
+        {
+            "undefined": "AS PER STOCK"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-00010": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0010",
+            "Start Date": "12/20/25",
+            "End Date": "1/3/26"
+        },
+        {
+            "undefined": "client : furniture fot 11 factory store"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "3 seater ",
+            "Job Order No.": "6"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "1 seater",
+            "Job Order No.": "3"
+        },
+        {
+            "Job Order Date": "MATERIAL REQUEST"
+        },
+        {
+            "Job Order Date": "WOOD",
+            "undefined": "NOTES",
+            "End Date": "QTY"
+        },
+        {
+            "undefined": "L",
+            "Sales person": "T"
+        },
+        {
+            "undefined": "just painted"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-0009": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0009",
+            "Start Date": "29-7-2025",
+            "End Date": "27-8-2025"
+        },
+        {
+            "undefined": "client : skh fahed"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "150",
+            "Job Order No.": "5",
+            "End Date": "SAMPLE & FACTORY WORK"
+        },
+        {
+            "Job Order Date": "MATERIAL REQUEST"
+        },
+        {
+            "Job Order Date": "WOOD",
+            "undefined": "NOTES",
+            "End Date": "QTY"
+        },
+        {
+            "undefined": "L",
+            "Sales person": "T"
+        },
+        {
+            "undefined": "3000",
+            "Sales person": "25"
+        },
+        {
+            "undefined": "white paint"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-0008": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0008",
+            "Start Date": "29-7-2025",
+            "End Date": "27-8-2025"
+        },
+        {
+            "undefined": "ALABDULLATIF FURNITURE "
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "150",
+            "Job Order No.": "5",
+            "End Date": "SAMPLE & FACTORY WORK"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "2400",
+            "Job Order No.": "3"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "1400",
+            "Job Order No.": "1"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "1200",
+            "Job Order No.": "3"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "600",
+            "Job Order No.": "3"
+        },
+        {
+            "Job Order Date": "6",
+            "undefined": "AS PER SAMPLE",
+            "Job Order No.": "1"
+        },
+        {
+            "Job Order Date": "MATERIAL REQUEST"
+        },
+        {
+            "Job Order Date": "WOOD",
+            "undefined": "NOTES",
+            "End Date": "QTY"
+        },
+        {
+            "undefined": "L",
+            "Sales person": "T"
+        },
+        {
+            "undefined": "2150",
+            "Sales person": "33"
+        },
+        {
+            "undefined": "2.5",
+            "Sales person": "50"
+        },
+        {
+            "undefined": "2.5",
+            "Sales person": "50"
+        },
+        {
+            "undefined": "2440",
+            "Sales person": "1"
+        },
+        {
+            "undefined": "2440",
+            "Sales person": "18"
+        },
+        {
+            "undefined": "2440",
+            "Sales person": "12"
+        },
+        {
+            "undefined": "-",
+            "Sales person": "-"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-0007": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0007",
+            "Start Date": "27-7-2025",
+            "End Date": "27-7-2025"
+        },
+        {
+            "undefined": "MIRROR:"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "undefined": "6",
+            "Job Order No.": "1"
+        },
+        {
+            "Job Order Date": "MATERIAL REQUEST"
+        },
+        {
+            "Job Order Date": "WOOD",
+            "undefined": "NOTES",
+            "End Date": "QTY"
+        },
+        {
+            "undefined": "T",
+            "Sales person": "L"
+        },
+        {
+            "undefined": "6",
+            "Sales person": "3314"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-0006": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0006",
+            "Start Date": "27-7-2025",
+            "End Date": "27-7-2025"
+        },
+        {
+            "undefined": "FURNITURE:"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "F-8045",
+            "Job Order No.": "4",
+            "End Date": "AS PER SAMPLE"
+        },
+        {
+            "Job Order Date": "MATERIAL REQUEST"
+        },
+        {
+            "Job Order Date": "WOOD",
+            "undefined": "NOTES",
+            "End Date": "QTY"
+        },
+        {
+            "undefined": "T",
+            "Sales person": "L"
+        },
+        {
+            "undefined": "50",
+            "Sales person": "4200"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-0004": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0004",
+            "Start Date": "45865.00",
+            "End Date": "27-7-2025"
+        },
+        {
+            "undefined": "FURNITURE:"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "40",
+            "Job Order No.": "112"
+        },
+        {
+            "Job Order Date": "2",
+            "undefined": "40",
+            "Job Order No.": "116"
+        },
+        {
+            "Job Order Date": "3",
+            "undefined": "40",
+            "Job Order No.": "8"
+        },
+        {
+            "Job Order Date": "4",
+            "undefined": "40",
+            "Job Order No.": "50"
+        },
+        {
+            "Job Order Date": "5",
+            "undefined": "40",
+            "Job Order No.": "4"
+        },
+        {
+            "Job Order Date": "6",
+            "undefined": "40",
+            "Job Order No.": "1"
+        },
+        {
+            "Job Order Date": "7",
+            "undefined": "40",
+            "Job Order No.": "33"
+        },
+        {
+            "Job Order Date": "8",
+            "undefined": "40",
+            "Job Order No.": "5"
+        },
+        {
+            "Job Order Date": "MATERIAL REQUEST"
+        },
+        {
+            "Job Order Date": "WOOD",
+            "undefined": "NOTES",
+            "End Date": "QTY"
+        },
+        {
+            "undefined": "L",
+            "Sales person": "T"
+        },
+        {
+            "undefined": "4250",
+            "Sales person": "40"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-0003": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0004",
+            "Start Date": "45865.00",
+            "End Date": "45865.00"
+        },
+        {
+            "undefined": "CLIENT: ALYASMEEN BRANCH"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "1000",
+            "Job Order No.": "1"
+        },
+        {
+            "Job Order Date": "MATERIAL REQUEST"
+        },
+        {
+            "Job Order Date": "WOOD",
+            "undefined": "NOTES",
+            "End Date": "QTY"
+        },
+        {
+            "undefined": "L",
+            "Sales person": "T"
+        },
+        {
+            "undefined": "HOUR"
+        },
+        {
+            "undefined": "HOUR"
+        },
+        {
+            "undefined": "LTR"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ],
+    "25-07-0001": [
+        {
+            "Job Order Date": "12/20/25",
+            "Job Order No.": "25-07-0001",
+            "Start Date": "27-7-2025",
+            "End Date": "27-7-2025"
+        },
+        {
+            "undefined": "CLIENT: OLAYA BRANCH"
+        },
+        {
+            "Job Order Date": "NO.",
+            "undefined": "Paint",
+            "Job Order No.": "Q.T.Y",
+            "End Date": "DESIGN"
+        },
+        {
+            "undefined": "D"
+        },
+        {
+            "Job Order Date": "1",
+            "undefined": "1000",
+            "Job Order No.": "1"
+        },
+        {
+            "Job Order Date": "2"
+        },
+        {
+            "Job Order Date": "3"
+        },
+        {
+            "Job Order Date": "4"
+        },
+        {
+            "Job Order Date": "5"
+        },
+        {
+            "Job Order Date": "6"
+        },
+        {
+            "Job Order Date": "7"
+        },
+        {
+            "Job Order Date": "8"
+        },
+        {
+            "Job Order Date": "MATERIAL REQUEST"
+        },
+        {
+            "Job Order Date": "WOOD",
+            "undefined": "NOTES",
+            "End Date": "QTY"
+        },
+        {
+            "undefined": "L",
+            "Sales person": "T"
+        },
+        {
+            "undefined": "HOUR"
+        },
+        {
+            "undefined": "HOUR"
+        },
+        {
+            "undefined": "LTR"
+        },
+        {
+            "undefined": "Factory Manager",
+            "End Date": "Production Dept."
+        },
+        {
+            "undefined": "Engr: Sabry Mahfouz",
+            "End Date": "Production Dept."
+        }
+    ]
+}
