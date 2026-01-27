@@ -1,5 +1,5 @@
 {
-  "name": "forest-edge-factory",
+  "name": "edgefactory-erp",
   "version": "1.0.0",
   "description": "نظام إدارة المخزون - Forest Edge Factory",
   "main": "electron/main.js",

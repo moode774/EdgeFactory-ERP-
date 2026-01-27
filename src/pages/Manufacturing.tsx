@@ -4,6 +4,7 @@ import { Product, WorkOrder, WorkOrderItem, MaterialRequest, Customer } from '..
 import { AutoCompleteInput } from '../components/AutoCompleteInput';
 import { autoCompleteService } from '../services/AutoCompleteService';
 import WorkOrdersSummaryPrint from '../components/manufacturing/WorkOrdersSummaryPrint';
+import { AdvancedWorkOrderEditor } from '../components/manufacturing/AdvancedWorkOrderEditor';
 import { useLanguage } from '../contexts/LanguageContext';
 import { importWorkOrdersBatch } from '../utils/importWorkOrders';
 
@@ -23,6 +24,7 @@ const ManufacturingPage = ({ lang, products, customers, workOrders, onSaveWorkOr
     const { t } = useLanguage();
     const [showWOModal, setShowWOModal] = useState(false); // For ADD only
     const [showEditModal, setShowEditModal] = useState(false); // For EDIT only (print-style)
+    const [showAdvancedEditor, setShowAdvancedEditor] = useState(false); // For ADVANCED EDIT
     const [showPrintPreview, setShowPrintPreview] = useState(false);
     const [showSummaryPrint, setShowSummaryPrint] = useState(false);
     const [selectedOrder, setSelectedOrder] = useState<WorkOrder | null>(null);
@@ -653,6 +655,25 @@ const ManufacturingPage = ({ lang, products, customers, workOrders, onSaveWorkOr
             handlePrint();
         }, 100);
     };
+
+    // Duplicate Order
+    const handleDuplicateOrder = (order: WorkOrder) => {
+        const newJobOrderNumber = generateJobOrderNumber();
+        const duplicatedOrder: WorkOrder = {
+            ...order,
+            id: `wo-${Date.now()}`,
+            orderNumber: generateOrderNumber(),
+            jobOrderNumber: newJobOrderNumber,
+            customerName: order.customerName + ' - COPY',
+            status: 'planned',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+
+        onSaveWorkOrder(duplicatedOrder);
+        alert('Order duplicated successfully! ✓');
+    };
+
     const handlePrint = () => {
         if (selectedOrder) {
             const order = selectedOrder;
@@ -1190,8 +1211,11 @@ const ManufacturingPage = ({ lang, products, customers, workOrders, onSaveWorkOr
                                     <button onClick={() => openPrintPreview(wo)} className="px-3 py-1.5 bg-white text-slate-700 border border-slate-300 rounded-md hover:border-slate-400 hover:bg-slate-50 text-xs font-bold transition-all shadow-sm flex items-center gap-1.5">
                                         <Printer size={14} /> {lang === 'ar' ? 'طباعة' : 'Print'}
                                     </button>
-                                    <button onClick={(e) => { e.stopPropagation(); openEditOrderModal(wo); }} className="px-3 py-1.5 bg-white text-amber-700 border border-amber-300 rounded-md hover:bg-amber-50 text-xs font-bold transition-all shadow-sm flex items-center gap-1.5">
-                                        <Edit3 size={14} /> {t('edit')}
+                                    <button onClick={() => handleDuplicateOrder(wo)} className="px-3 py-1.5 bg-white text-blue-700 border border-blue-300 rounded-md hover:bg-blue-50 text-xs font-bold transition-all shadow-sm flex items-center gap-1.5">
+                                        <Copy size={14} /> {lang === 'ar' ? 'نسخ' : 'Copy'}
+                                    </button>
+                                    <button onClick={() => { setSelectedOrder(wo); setShowAdvancedEditor(true); }} className="px-3 py-1.5 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-md text-xs font-bold transition-all shadow-md flex items-center gap-1.5">
+                                        <Grid size={14} /> {lang === 'ar' ? 'تعديل متقدم' : 'Advanced Edit'}
                                     </button>
                                     <button onClick={() => onDeleteWorkOrder(wo.id)} className="px-3 py-1.5 bg-white text-red-700 border border-red-300 rounded-md hover:bg-red-50 text-xs font-bold transition-all shadow-sm flex items-center gap-1.5">
                                         <Trash2 size={14} /> {t('delete')}
@@ -1254,11 +1278,18 @@ const ManufacturingPage = ({ lang, products, customers, workOrders, onSaveWorkOr
                                                 <Printer size={16} />
                                             </button>
                                             <button
-                                                onClick={() => openEditOrderModal(wo)}
-                                                className="p-2 text-amber-600 hover:bg-amber-50 rounded-lg border-2 border-amber-300 hover:border-amber-400 transition-all"
-                                                title="Edit"
+                                                onClick={() => handleDuplicateOrder(wo)}
+                                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg border-2 border-blue-300 hover:border-blue-400 transition-all"
+                                                title="Copy"
                                             >
-                                                <Edit3 size={16} />
+                                                <Copy size={16} />
+                                            </button>
+                                            <button
+                                                onClick={() => { setSelectedOrder(wo); setShowAdvancedEditor(true); }}
+                                                className="p-2 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-lg border-2 border-purple-400 transition-all shadow-md"
+                                                title="Advanced Edit"
+                                            >
+                                                <Grid size={16} />
                                             </button>
                                             <button
                                                 onClick={() => onDeleteWorkOrder(wo.id)}
@@ -2676,7 +2707,12 @@ const ManufacturingPage = ({ lang, products, customers, workOrders, onSaveWorkOr
                                 </div>
                                 <div className="border border-slate-300 p-2">
                                     <div className="text-xs font-bold text-slate-600 mb-1">JOB ORDER NO</div>
-                                    <div className="text-center font-bold">{woForm.jobOrderNumber}</div>
+                                    <input
+                                        type="text"
+                                        value={woForm.jobOrderNumber}
+                                        onChange={(e) => setWoForm({ ...woForm, jobOrderNumber: e.target.value })}
+                                        className="w-full text-center font-bold border-0 focus:ring-2 focus:ring-blue-500 rounded"
+                                    />
                                 </div>
                                 <div className="border border-slate-300 p-2">
                                     <div className="text-xs font-bold text-slate-600 mb-1">JOB ORDER DATE</div>
@@ -2878,6 +2914,22 @@ const ManufacturingPage = ({ lang, products, customers, workOrders, onSaveWorkOr
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* Advanced Work Order Editor */}
+            {showAdvancedEditor && selectedOrder && (
+                <AdvancedWorkOrderEditor
+                    workOrder={selectedOrder}
+                    onSave={(updatedOrder) => {
+                        onUpdateWorkOrder(updatedOrder);
+                        setShowAdvancedEditor(false);
+                        setSelectedOrder(null);
+                    }}
+                    onClose={() => {
+                        setShowAdvancedEditor(false);
+                        setSelectedOrder(null);
+                    }}
+                />
             )}
         </div >
     );
