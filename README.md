@@ -1,41 +1,36 @@
-# 🏭 EdgeFactory ERP: Industrial Operations Suite
-## 🌲 فوريست ايدج - نظام إدارة العمليات الصناعية المتكامل
+<div align="center">
 
-نظام برمي متطور مصمم خصيصاً لإدارة المصانع والعمليات الإنتاجية، يجمع بين قوة **React** ومرونة **Firebase** مع تجربة مستخدم سطح مكتب سلسة عبر **Electron**.
+# 🏭 EdgeFactory ERP
 
-> [!NOTE]
-> **ملاحظة:** هذا المشروع قيد التطوير حالياً ولم يكتمل بشكل نهائي بعد.
+### نظام إدارة العمليات الصناعية المتكامل
 
-### 🚀 الميزات الرئيسية
-*   **إدارة التصنيع:** نظام كامل لأوامر العمل يتضمن تدفق سير العمل متعدد المراحل.
-*   **الرقابة على المخزون:** تتبع حي ودقيق للمخزون في مستودعات متعددة.
-*   **إدارة العملاء والموردين:** وحدة CRM متكاملة لإدارة العلاقات والبيانات.
-*   **دعم ثنائي اللغة:** واجهة احترافية تدعم اللغتين العربية والإنجليزية (RTL full support).
-*   **تطبيق سطح المكتب:** يعمل كتطبيق مستقل على الويندوز لتوفير أداء أسرع.
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Electron](https://img.shields.io/badge/Electron-Desktop-47848F?style=for-the-badge&logo=electron&logoColor=white)](https://www.electronjs.org)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=black)](https://firebase.google.com)
 
-### 🛠️ التقنيات المستخدمة
-*   **الواجهة الأمامية:** React 19, TypeScript
-*   **التنسيق:** Tailwind CSS & Vanilla CSS
-*   **قواعد البيانات:** Firebase (Firestore, Hosting)
-*   **البيئة التشغيلية:** Electron (Desktop Application)
-*   **أداة البناء:** Vite
-
-### 📦 التشغيل في بيئة التطوير
-```bash
-# تثبيت المكتبات
-npm install
-
-# تشغيل خادم التطوير
-npm run dev
-
-# تشغيل بنسخة سطح المكتب
-npm run electron:dev
-```
-
-### 🔧 أوامر البناء والنشر
-*   `npm run build`: بناء النسخة النهائية.
-*   `npm run deploy`: الرفع على Firebase Hosting.
-*   `npm run package`: استخراج نسخة محمولة (Portable EXE).
+</div>
 
 ---
-**تم التطوير بكل فخر لصالح Forest Edge Factory 🌲**
+
+## عن المشروع
+
+نظام ERP متكامل لإدارة العمليات الصناعية في مصانع Forest Edge — تطبيق سطح مكتب بـ Electron.
+
+## التقنيات
+
+| التقنية | الغرض |
+|---------|-------|
+| TypeScript + React | واجهة المستخدم |
+| Electron | تطبيق سطح المكتب |
+| Firebase | قاعدة البيانات |
+| Python | معالجة التقارير |
+
+## المميزات
+
+- 📋 إدارة أوامر التشغيل
+- 📊 تقارير الإنتاج
+- 🖥️ تطبيق سطح مكتب احترافي
+- 🔄 تزامن البيانات مع Firebase
+
+---
+<div align="center"><sub>صُنع بـ ❤️ من فريق Forest Edge</sub></div>
